@@ -62,19 +62,24 @@ final class HUDPanelController: NSObject, PermissionGatePresenting {
         let host = NSHostingController(rootView: AnyView(content))
         host.view.frame = NSRect(x: 0, y: 0, width: 480, height: 280)
 
+        // v0.3 §23.11 defaults. Borderless + non-activating gives the
+        // overlay-on-top-of-the-user's-app feel; transient prevents
+        // the panel from showing in the app switcher. Explicit
+        // isReleasedWhenClosed = false because the controller owns
+        // the lifecycle via tearDown().
         let panel = NSPanel(
             contentRect: host.view.frame,
-            styleMask: [.titled, .closable, .nonactivatingPanel, .utilityWindow, .hudWindow],
+            styleMask: [.nonactivatingPanel, .borderless],
             backing: .buffered,
             defer: false
         )
-        panel.title = "TAEL"
         panel.contentViewController = host
         panel.isFloatingPanel = true
         panel.becomesKeyOnlyIfNeeded = true
         panel.hidesOnDeactivate = false
+        panel.isReleasedWhenClosed = false
         panel.level = .floating
-        panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
+        panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .transient]
         return panel
     }
 
