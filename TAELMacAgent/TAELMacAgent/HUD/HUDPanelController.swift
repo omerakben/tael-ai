@@ -33,7 +33,9 @@ final class HUDPanelController: NSObject, PermissionGatePresenting {
     /// requirement; the body hops to `@MainActor` explicitly.
     nonisolated func showGate(for kind: PermissionKind) async {
         await MainActor.run {
-            self.presentNew(content: PermissionGateView(kind: kind))
+            self.presentNew(content: PermissionGateView(kind: kind) { [weak self] in
+                self?.tearDown()
+            })
         }
     }
 
