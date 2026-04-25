@@ -1,0 +1,85 @@
+name: TAELMacAgent
+
+options:
+  bundleIdPrefix: ai.tael
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: false
+  defaultConfig: Debug
+
+settings:
+  base:
+    SWIFT_VERSION: "5.10"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    # DEVELOPMENT_TEAM is intentionally blank. See TODO_FOR_OZZY.md.
+    DEVELOPMENT_TEAM: ""
+    ALWAYS_SEARCH_USER_PATHS: NO
+    ENABLE_HARDENED_RUNTIME: YES
+    SWIFT_STRICT_CONCURRENCY: minimal
+
+configs:
+  Debug: debug
+  Release: release
+
+targets:
+  TAELMacAgent:
+    type: application
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: TAELMacAgent
+        excludes:
+          - "Resources/Info.plist"
+          - "Resources/TAELMacAgent.entitlements"
+    resources:
+      - path: TAELMacAgent/Resources/Assets.xcassets
+    info:
+      path: TAELMacAgent/Resources/Info.plist
+    entitlements:
+      path: TAELMacAgent/Resources/TAELMacAgent.entitlements
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ai.tael.macagent
+        PRODUCT_NAME: TAELMacAgent
+        INFOPLIST_FILE: TAELMacAgent/Resources/Info.plist
+        CODE_SIGN_ENTITLEMENTS: TAELMacAgent/Resources/TAELMacAgent.entitlements
+        CODE_SIGN_STYLE: Automatic
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_USER_SCRIPT_SANDBOXING: YES
+        GENERATE_INFOPLIST_FILE: NO
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks"
+
+  TAELMacAgentTests:
+    type: bundle.unit-test
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: TAELMacAgentTests
+    dependencies:
+      - target: TAELMacAgent
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ai.tael.macagent.tests
+        PRODUCT_NAME: TAELMacAgentTests
+        BUNDLE_LOADER: $(TEST_HOST)
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/TAELMacAgent.app/Contents/MacOS/TAELMacAgent
+
+schemes:
+  TAELMacAgent:
+    build:
+      targets:
+        TAELMacAgent: all
+        TAELMacAgentTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - TAELMacAgentTests
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
