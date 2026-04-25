@@ -24,7 +24,7 @@ import Foundation
 /// `PermissionsGate.withPermission` (in this file) can mint one.
 /// Protected services should accept a `PermissionGrant` and
 /// `precondition` on the kind they expect.
-public struct PermissionGrant: Sendable, Hashable {
+public struct PermissionGrant: Sendable, Equatable {
     public let kind: PermissionKind
 
     fileprivate init(kind: PermissionKind) {
