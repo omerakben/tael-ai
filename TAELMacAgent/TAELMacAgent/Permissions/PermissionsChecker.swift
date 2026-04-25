@@ -44,16 +44,17 @@ public final class PermissionsChecker: PermissionChecking {
         // `CGRequestScreenCaptureAccess` here — prompting is the gate
         // UI's job, not the checker's.
         //
+        // Apple's preflight returns `false` for BOTH "user denied" AND
+        // "never asked." We can't distinguish those two without a
+        // prompting call, so the honest mapping is `.notDetermined`.
+        // The gate UI surfaces the recovery path either way.
+        //
         // Note: in some macOS 14 minor versions, preflight can return
         // `true` even when ScreenCaptureKit later fails. PR 2 may add
         // an `SCShareableContent` sanity probe on top of preflight.
-        if CGPreflightScreenCaptureAccess() {
-            return .granted
-        } else {
-            return .denied
-        }
+        return CGPreflightScreenCaptureAccess() ? .granted : .notDetermined
         #else
-        return .denied
+        return .notDetermined
         #endif
     }
 }
