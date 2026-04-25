@@ -14,7 +14,6 @@
 		2B00000000000000000000A5 /* PermissionKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000A5 /* PermissionKind.swift */; };
 		2B00000000000000000000A6 /* PermissionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000A6 /* PermissionStatus.swift */; };
 		2B00000000000000000000A7 /* PermissionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000A7 /* PermissionError.swift */; };
-		2B00000000000000000000A8 /* PermissionGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000A8 /* PermissionGrant.swift */; };
 		2B00000000000000000000A9 /* PermissionsChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000A9 /* PermissionsChecker.swift */; };
 		2B00000000000000000000AA /* PermissionsGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000AA /* PermissionsGate.swift */; };
 		2B00000000000000000000AB /* HUDPanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000AB /* HUDPanelController.swift */; };
@@ -47,7 +46,6 @@
 		1A00000000000000000000A5 /* PermissionKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionKind.swift; sourceTree = "<group>"; };
 		1A00000000000000000000A6 /* PermissionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionStatus.swift; sourceTree = "<group>"; };
 		1A00000000000000000000A7 /* PermissionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionError.swift; sourceTree = "<group>"; };
-		1A00000000000000000000A8 /* PermissionGrant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionGrant.swift; sourceTree = "<group>"; };
 		1A00000000000000000000A9 /* PermissionsChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsChecker.swift; sourceTree = "<group>"; };
 		1A00000000000000000000AA /* PermissionsGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsGate.swift; sourceTree = "<group>"; };
 		1A00000000000000000000AB /* HUDPanelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDPanelController.swift; sourceTree = "<group>"; };
@@ -131,7 +129,6 @@
 				1A00000000000000000000A5 /* PermissionKind.swift */,
 				1A00000000000000000000A6 /* PermissionStatus.swift */,
 				1A00000000000000000000A7 /* PermissionError.swift */,
-				1A00000000000000000000A8 /* PermissionGrant.swift */,
 				1A00000000000000000000A9 /* PermissionsChecker.swift */,
 				1A00000000000000000000AA /* PermissionsGate.swift */,
 			);
@@ -300,7 +297,6 @@
 				2B00000000000000000000A5 /* PermissionKind.swift in Sources */,
 				2B00000000000000000000A6 /* PermissionStatus.swift in Sources */,
 				2B00000000000000000000A7 /* PermissionError.swift in Sources */,
-				2B00000000000000000000A8 /* PermissionGrant.swift in Sources */,
 				2B00000000000000000000A9 /* PermissionsChecker.swift in Sources */,
 				2B00000000000000000000AA /* PermissionsGate.swift in Sources */,
 				2B00000000000000000000AB /* HUDPanelController.swift in Sources */,
@@ -390,6 +386,7 @@
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
 			};
 			name = Debug;
 		};
@@ -442,6 +439,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_STRICT_CONCURRENCY = complete;
 			};
 			name = Release;
 		};

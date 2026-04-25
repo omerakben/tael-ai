@@ -23,12 +23,13 @@ TAELMacAgent (menubar app, native macOS)
 │   ├── PermissionStatus.swift     Enum: notDetermined, denied, granted,
 │   │                              restricted
 │   ├── PermissionError.swift      Errors thrown by PermissionsGate
-│   ├── PermissionGrant.swift      Tokenized grant. fileprivate init —
-│   │                              ONLY PermissionsGate can mint one.
 │   ├── PermissionsChecker.swift   Reads current OS permission state.
 │   │                              v0: Screen Recording only.
 │   └── PermissionsGate.swift      The architectural boundary. Every
 │                                  protected call goes through here.
+│                                  Also defines `PermissionGrant` so
+│                                  its initializer is `fileprivate` to
+│                                  this single file.
 ├── HUD
 │   ├── HUDPanelController.swift   Non-activating NSPanel host.
 │   ├── HUDView.swift              SwiftUI placeholder content.
@@ -63,11 +64,12 @@ let image = try await permissionsGate.withPermission(.screenRecording) { grant i
 }
 ```
 
-`PermissionGrant`'s initializer is `fileprivate` to the `Permissions/`
-folder, so only `PermissionsGate` can mint one. Protected services accept
-the grant and assert their expected kind via `precondition`. This makes
-the boundary **a code-review-visible, type-system-visible boundary**, not
-a polite convention.
+`PermissionGrant` is declared in the same file as `PermissionsGate`,
+so its `fileprivate init` is callable only from inside that one file.
+Only `PermissionsGate.withPermission` can mint one. Protected services
+accept the grant and assert their expected kind via `precondition`.
+This makes the boundary **a code-review-visible, type-system-visible
+boundary**, not a polite convention.
 
 ## Week 1 heartbeat (target, not yet wired)
 
