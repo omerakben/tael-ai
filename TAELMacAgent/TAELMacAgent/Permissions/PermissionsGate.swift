@@ -81,6 +81,14 @@ public final class PermissionsGate: Sendable {
         _ kind: PermissionKind,
         operation: (PermissionGrant) async throws -> T
     ) async throws -> T {
+        // Unimplemented kinds short-circuit before the checker. Showing
+        // a "grant Microphone" sheet for a kind we don't actually wire
+        // is misleading — the user can't recover. Throw a typed error
+        // so callers can branch on "not yet supported" vs "user denied".
+        guard kind.isImplemented else {
+            throw PermissionError.notImplemented(kind)
+        }
+
         let status = await checker.status(for: kind)
 
         guard status == .granted else {

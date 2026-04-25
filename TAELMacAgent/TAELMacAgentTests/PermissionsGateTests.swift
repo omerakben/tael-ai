@@ -144,4 +144,30 @@ final class PermissionsGateTests: XCTestCase {
         let shown = await ui.shownKinds
         XCTAssertTrue(shown.isEmpty, "Gate UI must not appear when the operation itself errors.")
     }
+
+    // MARK: - Unimplemented kind path
+
+    func test_withPermission_whenKindNotImplemented_throwsNotImplemented_andDoesNotShowGate() async {
+        let checker = StubChecker([:])  // empty: status() defaults to .notDetermined for any kind
+        let ui = SpyUI()
+        let gate = PermissionsGate(checker: checker, permissionUI: ui)
+
+        var operationRan = false
+
+        do {
+            _ = try await gate.withPermission(.microphone) { _ in
+                operationRan = true
+                return ()
+            }
+            XCTFail("Expected PermissionError.notImplemented to be thrown.")
+        } catch let error as PermissionError {
+            XCTAssertEqual(error, .notImplemented(.microphone))
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+
+        XCTAssertFalse(operationRan, "Operation must not run for unimplemented kinds.")
+        let shown = await ui.shownKinds
+        XCTAssertTrue(shown.isEmpty, "Gate UI must not appear for unimplemented kinds — there is nothing the user can grant.")
+    }
 }
