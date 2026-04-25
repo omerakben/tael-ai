@@ -18,11 +18,11 @@ import Foundation
 import CoreGraphics
 #endif
 
-public protocol PermissionsCheckerProtocol: Sendable {
+public protocol PermissionChecking: Sendable {
     func status(for kind: PermissionKind) async -> PermissionStatus
 }
 
-public final class PermissionsChecker: PermissionsCheckerProtocol {
+public final class PermissionsChecker: PermissionChecking {
     public init() {}
 
     public func status(for kind: PermissionKind) async -> PermissionStatus {

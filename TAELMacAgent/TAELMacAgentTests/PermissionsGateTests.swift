@@ -25,7 +25,7 @@ final class PermissionsGateTests: XCTestCase {
 
     // MARK: - Test doubles
 
-    private actor StubChecker: PermissionsCheckerProtocol {
+    private actor StubChecker: PermissionChecking {
         private var statuses: [PermissionKind: PermissionStatus]
         private(set) var queryCount: Int = 0
 

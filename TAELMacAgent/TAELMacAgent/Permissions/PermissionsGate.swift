@@ -55,11 +55,11 @@ public struct NoopPermissionGateUI: PermissionGateUI {
 // MARK: - PermissionsGate
 
 public final class PermissionsGate: Sendable {
-    private let checker: PermissionsCheckerProtocol
+    private let checker: PermissionChecking
     private let permissionUI: PermissionGateUI
 
     public init(
-        checker: PermissionsCheckerProtocol = PermissionsChecker(),
+        checker: PermissionChecking = PermissionsChecker(),
         permissionUI: PermissionGateUI = NoopPermissionGateUI()
     ) {
         self.checker = checker
