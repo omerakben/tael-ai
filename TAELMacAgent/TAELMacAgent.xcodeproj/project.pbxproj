@@ -1,0 +1,567 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2B00000000000000000000A1 /* TAELMacAgentApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000A1 /* TAELMacAgentApp.swift */; };
+		2B00000000000000000000A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000A2 /* AppDelegate.swift */; };
+		2B00000000000000000000A3 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000A3 /* MenuBarController.swift */; };
+		2B00000000000000000000A4 /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000A4 /* HotkeyManager.swift */; };
+		2B00000000000000000000A5 /* PermissionKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000A5 /* PermissionKind.swift */; };
+		2B00000000000000000000A6 /* PermissionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000A6 /* PermissionStatus.swift */; };
+		2B00000000000000000000A7 /* PermissionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000A7 /* PermissionError.swift */; };
+		2B00000000000000000000A9 /* PermissionsChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000A9 /* PermissionsChecker.swift */; };
+		2B00000000000000000000AA /* PermissionsGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000AA /* PermissionsGate.swift */; };
+		2B00000000000000000000AB /* HUDPanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000AB /* HUDPanelController.swift */; };
+		2B00000000000000000000AC /* HUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000AC /* HUDView.swift */; };
+		2B00000000000000000000AD /* PermissionGateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000AD /* PermissionGateView.swift */; };
+		2B00000000000000000000AE /* ScreenshotTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000AE /* ScreenshotTarget.swift */; };
+		2B00000000000000000000AF /* CapturedScreenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000AF /* CapturedScreenshot.swift */; };
+		2B00000000000000000000B0 /* ScreenCaptureService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000B0 /* ScreenCaptureService.swift */; };
+		2B00000000000000000000B1 /* InvocationLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000B1 /* InvocationLog.swift */; };
+		2B00000000000000000000B2 /* LocalLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000B2 /* LocalLogService.swift */; };
+		2B00000000000000000000B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000B3 /* Assets.xcassets */; };
+		2B00000000000000000000C1 /* PermissionsGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000C1 /* PermissionsGateTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9A00000000000000000000A1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8A00000000000000000000A1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A00000000000000000000A1;
+			remoteInfo = TAELMacAgent;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1A00000000000000000000A1 /* TAELMacAgentApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TAELMacAgentApp.swift; sourceTree = "<group>"; };
+		1A00000000000000000000A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		1A00000000000000000000A3 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
+		1A00000000000000000000A4 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
+		1A00000000000000000000A5 /* PermissionKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionKind.swift; sourceTree = "<group>"; };
+		1A00000000000000000000A6 /* PermissionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionStatus.swift; sourceTree = "<group>"; };
+		1A00000000000000000000A7 /* PermissionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionError.swift; sourceTree = "<group>"; };
+		1A00000000000000000000A9 /* PermissionsChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsChecker.swift; sourceTree = "<group>"; };
+		1A00000000000000000000AA /* PermissionsGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsGate.swift; sourceTree = "<group>"; };
+		1A00000000000000000000AB /* HUDPanelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDPanelController.swift; sourceTree = "<group>"; };
+		1A00000000000000000000AC /* HUDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDView.swift; sourceTree = "<group>"; };
+		1A00000000000000000000AD /* PermissionGateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionGateView.swift; sourceTree = "<group>"; };
+		1A00000000000000000000AE /* ScreenshotTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTarget.swift; sourceTree = "<group>"; };
+		1A00000000000000000000AF /* CapturedScreenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturedScreenshot.swift; sourceTree = "<group>"; };
+		1A00000000000000000000B0 /* ScreenCaptureService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCaptureService.swift; sourceTree = "<group>"; };
+		1A00000000000000000000B1 /* InvocationLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvocationLog.swift; sourceTree = "<group>"; };
+		1A00000000000000000000B2 /* LocalLogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLogService.swift; sourceTree = "<group>"; };
+		1A00000000000000000000B3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1A00000000000000000000B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1A00000000000000000000B5 /* TAELMacAgent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TAELMacAgent.entitlements; sourceTree = "<group>"; };
+		1A00000000000000000000C1 /* PermissionsGateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsGateTests.swift; sourceTree = "<group>"; };
+		1A00000000000000000000F1 /* TAELMacAgent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TAELMacAgent.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A00000000000000000000F2 /* TAELMacAgentTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TAELMacAgentTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4A00000000000000000000A2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4A00000000000000000000C2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3A00000000000000000000A1 /* / */ = {
+			isa = PBXGroup;
+			children = (
+				3A00000000000000000000A2 /* TAELMacAgent */,
+				3A00000000000000000000C0 /* TAELMacAgentTests */,
+				3A00000000000000000000F0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3A00000000000000000000A2 /* TAELMacAgent */ = {
+			isa = PBXGroup;
+			children = (
+				3A00000000000000000000A3 /* App */,
+				3A00000000000000000000A4 /* Hotkey */,
+				3A00000000000000000000A5 /* Permissions */,
+				3A00000000000000000000A6 /* HUD */,
+				3A00000000000000000000A7 /* Capture */,
+				3A00000000000000000000A8 /* Logging */,
+				3A00000000000000000000A9 /* Resources */,
+			);
+			path = TAELMacAgent;
+			sourceTree = "<group>";
+		};
+		3A00000000000000000000A3 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				1A00000000000000000000A1 /* TAELMacAgentApp.swift */,
+				1A00000000000000000000A2 /* AppDelegate.swift */,
+				1A00000000000000000000A3 /* MenuBarController.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		3A00000000000000000000A4 /* Hotkey */ = {
+			isa = PBXGroup;
+			children = (
+				1A00000000000000000000A4 /* HotkeyManager.swift */,
+			);
+			path = Hotkey;
+			sourceTree = "<group>";
+		};
+		3A00000000000000000000A5 /* Permissions */ = {
+			isa = PBXGroup;
+			children = (
+				1A00000000000000000000A5 /* PermissionKind.swift */,
+				1A00000000000000000000A6 /* PermissionStatus.swift */,
+				1A00000000000000000000A7 /* PermissionError.swift */,
+				1A00000000000000000000A9 /* PermissionsChecker.swift */,
+				1A00000000000000000000AA /* PermissionsGate.swift */,
+			);
+			path = Permissions;
+			sourceTree = "<group>";
+		};
+		3A00000000000000000000A6 /* HUD */ = {
+			isa = PBXGroup;
+			children = (
+				1A00000000000000000000AB /* HUDPanelController.swift */,
+				1A00000000000000000000AC /* HUDView.swift */,
+				1A00000000000000000000AD /* PermissionGateView.swift */,
+			);
+			path = HUD;
+			sourceTree = "<group>";
+		};
+		3A00000000000000000000A7 /* Capture */ = {
+			isa = PBXGroup;
+			children = (
+				1A00000000000000000000AE /* ScreenshotTarget.swift */,
+				1A00000000000000000000AF /* CapturedScreenshot.swift */,
+				1A00000000000000000000B0 /* ScreenCaptureService.swift */,
+			);
+			path = Capture;
+			sourceTree = "<group>";
+		};
+		3A00000000000000000000A8 /* Logging */ = {
+			isa = PBXGroup;
+			children = (
+				1A00000000000000000000B1 /* InvocationLog.swift */,
+				1A00000000000000000000B2 /* LocalLogService.swift */,
+			);
+			path = Logging;
+			sourceTree = "<group>";
+		};
+		3A00000000000000000000A9 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				1A00000000000000000000B3 /* Assets.xcassets */,
+				1A00000000000000000000B4 /* Info.plist */,
+				1A00000000000000000000B5 /* TAELMacAgent.entitlements */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		3A00000000000000000000C0 /* TAELMacAgentTests */ = {
+			isa = PBXGroup;
+			children = (
+				1A00000000000000000000C1 /* PermissionsGateTests.swift */,
+			);
+			path = TAELMacAgentTests;
+			sourceTree = "<group>";
+		};
+		3A00000000000000000000F0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1A00000000000000000000F1 /* TAELMacAgent.app */,
+				1A00000000000000000000F2 /* TAELMacAgentTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7A00000000000000000000A1 /* TAELMacAgent */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6A00000000000000000000A2 /* Build configuration list for PBXNativeTarget "TAELMacAgent" */;
+			buildPhases = (
+				4A00000000000000000000A1 /* Sources */,
+				4A00000000000000000000A2 /* Frameworks */,
+				4A00000000000000000000A3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TAELMacAgent;
+			productName = TAELMacAgent;
+			productReference = 1A00000000000000000000F1 /* TAELMacAgent.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7A00000000000000000000C1 /* TAELMacAgentTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6A00000000000000000000C2 /* Build configuration list for PBXNativeTarget "TAELMacAgentTests" */;
+			buildPhases = (
+				4A00000000000000000000C1 /* Sources */,
+				4A00000000000000000000C2 /* Frameworks */,
+				4A00000000000000000000C3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9A00000000000000000000B1 /* PBXTargetDependency */,
+			);
+			name = TAELMacAgentTests;
+			productName = TAELMacAgentTests;
+			productReference = 1A00000000000000000000F2 /* TAELMacAgentTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8A00000000000000000000A1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 1530;
+				LastUpgradeCheck = 1530;
+				TargetAttributes = {
+					7A00000000000000000000A1 = {
+						CreatedOnToolsVersion = 15.3;
+					};
+					7A00000000000000000000C1 = {
+						CreatedOnToolsVersion = 15.3;
+						TestTargetID = 7A00000000000000000000A1;
+					};
+				};
+			};
+			buildConfigurationList = 6A00000000000000000000A1 /* Build configuration list for PBXProject "TAELMacAgent" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3A00000000000000000000A1;
+			productRefGroup = 3A00000000000000000000F0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7A00000000000000000000A1 /* TAELMacAgent */,
+				7A00000000000000000000C1 /* TAELMacAgentTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4A00000000000000000000A3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B00000000000000000000B3 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4A00000000000000000000C3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4A00000000000000000000A1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B00000000000000000000A1 /* TAELMacAgentApp.swift in Sources */,
+				2B00000000000000000000A2 /* AppDelegate.swift in Sources */,
+				2B00000000000000000000A3 /* MenuBarController.swift in Sources */,
+				2B00000000000000000000A4 /* HotkeyManager.swift in Sources */,
+				2B00000000000000000000A5 /* PermissionKind.swift in Sources */,
+				2B00000000000000000000A6 /* PermissionStatus.swift in Sources */,
+				2B00000000000000000000A7 /* PermissionError.swift in Sources */,
+				2B00000000000000000000A9 /* PermissionsChecker.swift in Sources */,
+				2B00000000000000000000AA /* PermissionsGate.swift in Sources */,
+				2B00000000000000000000AB /* HUDPanelController.swift in Sources */,
+				2B00000000000000000000AC /* HUDView.swift in Sources */,
+				2B00000000000000000000AD /* PermissionGateView.swift in Sources */,
+				2B00000000000000000000AE /* ScreenshotTarget.swift in Sources */,
+				2B00000000000000000000AF /* CapturedScreenshot.swift in Sources */,
+				2B00000000000000000000B0 /* ScreenCaptureService.swift in Sources */,
+				2B00000000000000000000B1 /* InvocationLog.swift in Sources */,
+				2B00000000000000000000B2 /* LocalLogService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4A00000000000000000000C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B00000000000000000000C1 /* PermissionsGateTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9A00000000000000000000B1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A00000000000000000000A1 /* TAELMacAgent */;
+			targetProxy = 9A00000000000000000000A1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		5A00000000000000000000A1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+			};
+			name = Debug;
+		};
+		5A00000000000000000000A2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_STRICT_CONCURRENCY = complete;
+			};
+			name = Release;
+		};
+		5A00000000000000000000A3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TAELMacAgent/Resources/TAELMacAgent.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = TAELMacAgent/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ai.tael.macagent;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		5A00000000000000000000A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TAELMacAgent/Resources/TAELMacAgent.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = TAELMacAgent/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ai.tael.macagent;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		5A00000000000000000000C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ai.tael.macagent.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TAELMacAgent.app/Contents/MacOS/TAELMacAgent";
+			};
+			name = Debug;
+		};
+		5A00000000000000000000C2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ai.tael.macagent.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TAELMacAgent.app/Contents/MacOS/TAELMacAgent";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6A00000000000000000000A1 /* Build configuration list for PBXProject "TAELMacAgent" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A00000000000000000000A1 /* Debug */,
+				5A00000000000000000000A2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6A00000000000000000000A2 /* Build configuration list for PBXNativeTarget "TAELMacAgent" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A00000000000000000000A3 /* Debug */,
+				5A00000000000000000000A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6A00000000000000000000C2 /* Build configuration list for PBXNativeTarget "TAELMacAgentTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A00000000000000000000C1 /* Debug */,
+				5A00000000000000000000C2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8A00000000000000000000A1 /* Project object */;
+}
