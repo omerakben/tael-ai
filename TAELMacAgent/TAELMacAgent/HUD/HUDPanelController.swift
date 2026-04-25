@@ -3,8 +3,8 @@
 //  TAELMacAgent
 //
 //  Owns the non-activating NSPanel that hosts the HUD. Implements
-//  `PermissionGateUI` so `PermissionsGate` can route missing-permission
-//  states through the same surface as the placeholder content.
+//  `PermissionGatePresenting` so `PermissionsGate` can route missing-
+//  permission states through the same surface as the placeholder content.
 //
 //  PR 1 ships an intentionally ugly placeholder. Real screenshot
 //  rendering lands in PR 2 (Week 1 ticket 10).
@@ -14,7 +14,7 @@ import AppKit
 import SwiftUI
 
 @MainActor
-final class HUDPanelController: NSObject, PermissionGateUI {
+final class HUDPanelController: NSObject, PermissionGatePresenting {
     private var panel: NSPanel?
 
     override init() {
@@ -27,7 +27,7 @@ final class HUDPanelController: NSObject, PermissionGateUI {
         presentNew(content: HUDView())
     }
 
-    /// `PermissionGateUI` implementation: show a sheet-like HUD that
+    /// `PermissionGatePresenting` implementation: show a sheet-like HUD that
     /// explains the missing permission and links to System Settings.
     /// `nonisolated` so it satisfies the non-isolated protocol
     /// requirement; the body hops to `@MainActor` explicitly.

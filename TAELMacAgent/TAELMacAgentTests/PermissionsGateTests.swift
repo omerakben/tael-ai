@@ -6,7 +6,7 @@
 //
 //    1. `withPermission` does NOT invoke the operation when status is
 //       not `.granted`. It throws `PermissionError.missing` and routes
-//       through `PermissionGateUI.showGate`.
+//       through `PermissionGatePresenting.showGate`.
 //    2. `withPermission` invokes the operation EXACTLY once on
 //       `.granted`, and the closure receives a `PermissionGrant`
 //       whose `kind` matches the requested kind.
@@ -39,7 +39,7 @@ final class PermissionsGateTests: XCTestCase {
         }
     }
 
-    private actor SpyUI: PermissionGateUI {
+    private actor SpyUI: PermissionGatePresenting {
         private(set) var shownKinds: [PermissionKind] = []
 
         func showGate(for kind: PermissionKind) async {

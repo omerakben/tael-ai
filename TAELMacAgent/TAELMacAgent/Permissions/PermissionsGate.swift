@@ -32,22 +32,22 @@ public struct PermissionGrant: Sendable, Hashable {
     }
 }
 
-// MARK: - Permission gate UI
+// MARK: - Permission gate presenting
 
 /// Minimal hook the gate uses to surface a permission sheet to the
 /// user. The HUD layer provides the real implementation; tests inject
 /// a stub.
 ///
 /// The method is `async` (no actor isolation in the protocol itself)
-/// so non-UI conformers (`NoopPermissionGateUI`, test spies) don't
+/// so non-UI conformers (`NoopPermissionGatePresenter`, test spies) don't
 /// need to hop. UI conformers (e.g. `HUDPanelController`) hop to
 /// `@MainActor` explicitly inside the implementation.
-public protocol PermissionGateUI: Sendable {
+public protocol PermissionGatePresenting: Sendable {
     func showGate(for kind: PermissionKind) async
 }
 
-/// No-op UI used when the gate runs in a non-UI context (tests, CLI).
-public struct NoopPermissionGateUI: PermissionGateUI {
+/// No-op presenter used when the gate runs in a non-UI context (tests, CLI).
+public struct NoopPermissionGatePresenter: PermissionGatePresenting {
     public init() {}
     public func showGate(for kind: PermissionKind) async {}
 }
@@ -56,11 +56,11 @@ public struct NoopPermissionGateUI: PermissionGateUI {
 
 public final class PermissionsGate: Sendable {
     private let checker: PermissionChecking
-    private let permissionUI: PermissionGateUI
+    private let permissionUI: PermissionGatePresenting
 
     public init(
         checker: PermissionChecking = PermissionsChecker(),
-        permissionUI: PermissionGateUI = NoopPermissionGateUI()
+        permissionUI: PermissionGatePresenting = NoopPermissionGatePresenter()
     ) {
         self.checker = checker
         self.permissionUI = permissionUI
