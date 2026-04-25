@@ -40,6 +40,15 @@ args = ["-y", "@upstash/context7-mcp"]
 startup_timeout_sec = 10
 tool_timeout_sec = 60
 
+# XcodeBuildMCP (Sentry) — 78+ Xcode/SPM/simulator tools.
+# Requires macOS 14.5+ and Xcode 16+. Higher timeouts because
+# xcodebuild and simulator ops are slow.
+[mcp_servers.xcodebuild]
+command = "npx"
+args = ["-y", "xcodebuildmcp@latest", "mcp"]
+startup_timeout_sec = 30
+tool_timeout_sec = 300
+
 # Playwright MCP
 # [mcp_servers.playwright]
 # command = "npx"
