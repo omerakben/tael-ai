@@ -16,8 +16,12 @@ public enum PermissionStatus: String, Sendable, Hashable {
     /// Granted and currently usable.
     case granted
 
-    /// Restricted by policy (parental controls, MDM). Surfacing this
-    /// distinctly lets us avoid showing a "click here to fix" affordance
-    /// the user cannot actually act on.
+    /// Restricted by policy (parental controls, MDM). Modeled
+    /// distinctly from `.denied` so callers (logging, future gate UI)
+    /// can treat policy-based unavailability as non-user-actionable.
+    /// Note: PR 1's gate UI receives only `PermissionKind`, not status,
+    /// so it cannot yet differentiate `.restricted` from `.denied` in
+    /// the presented sheet — that hook lands when status is threaded
+    /// through `PermissionGateUI`.
     case restricted
 }

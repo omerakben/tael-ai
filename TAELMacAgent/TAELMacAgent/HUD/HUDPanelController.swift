@@ -24,9 +24,7 @@ final class HUDPanelController: NSObject, PermissionGateUI {
     /// Show a placeholder HUD with the SwiftUI view. Used by the
     /// "Show HUD (placeholder)" menubar item in PR 1.
     func showPlaceholder() {
-        let panel = panel ?? makePanel(content: HUDView())
-        self.panel = panel
-        present(panel)
+        presentNew(content: HUDView())
     }
 
     /// `PermissionGateUI` implementation: show a sheet-like HUD that
@@ -35,10 +33,7 @@ final class HUDPanelController: NSObject, PermissionGateUI {
     /// requirement; the body hops to `@MainActor` explicitly.
     nonisolated func showGate(for kind: PermissionKind) async {
         await MainActor.run {
-            let view = PermissionGateView(kind: kind)
-            let panel = self.makePanel(content: view)
-            self.panel = panel
-            self.present(panel)
+            self.presentNew(content: PermissionGateView(kind: kind))
         }
     }
 
@@ -48,6 +43,18 @@ final class HUDPanelController: NSObject, PermissionGateUI {
     }
 
     // MARK: - Internals
+
+    /// Close any currently-presented panel and present a fresh one with
+    /// `content`. Avoids both the multi-panel leak and the "stale rootView"
+    /// bug from reusing a panel that was created for a different surface
+    /// (gate vs placeholder).
+    private func presentNew<Content: View>(content: Content) {
+        panel?.orderOut(nil)
+        panel = nil
+        let next = makePanel(content: content)
+        panel = next
+        present(next)
+    }
 
     private func makePanel<Content: View>(content: Content) -> NSPanel {
         let host = NSHostingController(rootView: AnyView(content))

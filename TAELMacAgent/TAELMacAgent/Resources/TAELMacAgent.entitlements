@@ -4,7 +4,7 @@
 <dict>
     <!--
         PR 1: App Sandbox is OFF.
-        ScreenCaptureKit + ScreeRecording TCC + global hotkeys are
+        ScreenCaptureKit + Screen Recording TCC + global hotkeys are
         easier to debug without the sandbox while we are still
         proving the heartbeat. Sandbox + hardened runtime decisions
         belong to the Developer ID / notarization milestone.

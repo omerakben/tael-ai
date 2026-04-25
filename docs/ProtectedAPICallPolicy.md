@@ -53,11 +53,14 @@ final class PermissionsGate {
 
 Two properties:
 
-1. **Tokenized boundary.** `PermissionGrant`'s initializer is
-   `fileprivate` to the `Permissions/` folder. Only `PermissionsGate`
-   can construct one. A protected service is therefore *unable* to be
-   called without going through the gate, because the closure body is
-   the only place a grant exists.
+1. **Tokenized boundary.** `PermissionGrant` is declared in the same
+   file as `PermissionsGate` (`PermissionsGate.swift`) with a
+   `fileprivate init`. Swift's `fileprivate` is scoped to a single
+   file, so only code inside `PermissionsGate.swift` can construct a
+   grant. A protected service is therefore *unable* to be called
+   without going through the gate, because the closure body
+   `PermissionsGate.withPermission` runs is the only place a grant
+   exists.
 2. **Single source of permission UI.** Missing permission always shows
    the same `PermissionGateView`. There is no per-feature ad-hoc
    "did you grant…" sheet.
@@ -92,7 +95,8 @@ The following are **review-blocking**:
 - Catching `PermissionError.missing` and silently retrying without going
   back through the gate.
 - Caching a `PermissionGrant` outside the closure that received it.
-- Making `PermissionGrant.init` `internal` or `public`.
+- Making `PermissionGrant.init` anything other than `fileprivate`,
+  or moving `PermissionGrant` out of `PermissionsGate.swift`.
 - Adding a per-feature permission sheet instead of routing through
   `PermissionGateView`.
 

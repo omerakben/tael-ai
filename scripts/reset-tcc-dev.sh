@@ -56,17 +56,42 @@ if pgrep -x "TAELMacAgent" >/dev/null 2>&1; then
   echo
 fi
 
+had_real_failure=0
 for svc in "${SERVICES[@]}"; do
   cmd=(tccutil reset "$svc" "$BUNDLE_ID")
   if [[ $DRY_RUN -eq 1 ]]; then
     echo "would run: ${cmd[*]}"
+    continue
+  fi
+
+  echo "running:   ${cmd[*]}"
+  # We capture combined output and the exit code so we can distinguish
+  # the typical "no existing entry" case (suppress, keep going) from
+  # real failures like an unknown service name (warn loudly).
+  output=$("${cmd[@]}" 2>&1)
+  rc=$?
+  if [[ $rc -eq 0 ]]; then
+    continue
+  fi
+
+  # tccutil's "nothing to reset" message looks like:
+  #   tccutil: Failed to reset all approval status for ai.tael.macagent
+  # That is benign — there was simply no entry yet. Anything else is
+  # surfaced and counted as a real failure so debugging is not hidden.
+  if [[ "$output" == *"Failed to reset"* ]]; then
+    echo "  (no existing entry for ${svc}, skipping)"
   else
-    echo "running:   ${cmd[*]}"
-    # tccutil exits non-zero if there is no entry to reset for that
-    # service. That is fine — treat it as a no-op.
-    "${cmd[@]}" || echo "  (no existing entry for ${svc}, skipping)"
+    echo "  warning: tccutil exited ${rc} for ${svc}:" >&2
+    echo "  ${output}" >&2
+    had_real_failure=1
   fi
 done
+
+if [[ $had_real_failure -ne 0 ]]; then
+  echo
+  echo "error: at least one tccutil call failed for an unexpected reason." >&2
+  exit 1
+fi
 
 echo
 echo "Done. Quit and relaunch TAELMacAgent before re-testing permissions."

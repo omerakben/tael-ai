@@ -10,7 +10,11 @@ options:
 
 settings:
   base:
-    SWIFT_VERSION: "5.10"
+    # Swift language *mode* (not toolchain version). Xcode's
+    # SWIFT_VERSION expects a language mode like "5.0" even when the
+    # active toolchain is Swift 5.10 / Xcode 15.x. The minimum
+    # compiler is documented separately in README.md.
+    SWIFT_VERSION: "5.0"
     MACOSX_DEPLOYMENT_TARGET: "14.0"
     # DEVELOPMENT_TEAM is intentionally blank. See TODO_FOR_OZZY.md.
     DEVELOPMENT_TEAM: ""

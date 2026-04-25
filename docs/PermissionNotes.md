@@ -35,9 +35,16 @@ If you hit a TCC weirdness, write it down here.
 ### Preflight
 
 We use `CGPreflightScreenCaptureAccess()` to read the current
-state without triggering the prompt. We use
-`CGRequestScreenCaptureAccess()` only when the user explicitly clicks
-"Request access" in the gate.
+state without triggering the prompt.
+
+PR 1's `PermissionGateView` does **not** call
+`CGRequestScreenCaptureAccess()`; it only links the user to System
+Settings → Privacy & Security → Screen Recording. The first system
+prompt for Screen Recording is therefore triggered as a side effect of
+the first real ScreenCaptureKit call (which lands in PR 2). If we add
+an explicit "Request access" button in the gate later, it will route
+through `CGRequestScreenCaptureAccess()` — but until then, the gate
+is "Open System Settings" only.
 
 > Note: in some macOS 14 minor versions, `CGPreflightScreenCaptureAccess`
 > can return `true` even when ScreenCaptureKit later fails. The gate

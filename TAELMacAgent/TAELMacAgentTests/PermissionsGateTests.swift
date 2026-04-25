@@ -10,11 +10,12 @@
 //    2. `withPermission` invokes the operation EXACTLY once on
 //       `.granted`, and the closure receives a `PermissionGrant`
 //       whose `kind` matches the requested kind.
-//    3. The grant's `kind` cannot be forged from outside the
-//       Permissions/ folder — this is enforced by `internal init` and
-//       verified by compilation of this test file (test target imports
-//       the app module via @testable import, so the test file should
-//       NOT attempt to construct `PermissionGrant` directly).
+//    3. The grant's `kind` cannot be forged from outside
+//       `PermissionsGate.swift` — `PermissionGrant` is declared in
+//       that same file with a `fileprivate init`, so even
+//       `@testable import` cannot reach the initializer from this
+//       test file. Verified at compile time: this test file does not
+//       and cannot construct `PermissionGrant` directly.
 //
 
 import XCTest
