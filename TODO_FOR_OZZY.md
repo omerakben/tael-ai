@@ -53,6 +53,7 @@ the pain if these are not resolved.
   the project was not compiled here. Source files follow the v0.3 layout
   and the `PermissionsGate` tokenized pattern, but a real Xcode build
   on macOS 14.0+ is the only ground truth. To verify:
+
   ```bash
   xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj \
              -scheme TAELMacAgent \
@@ -64,6 +65,7 @@ the pain if these are not resolved.
              -destination 'platform=macOS' \
              test
   ```
+
   Expected: clean build, all `TAELMacAgentTests` pass, app launches as a
   menubar utility, Quit menu works.
 
