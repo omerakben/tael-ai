@@ -1,0 +1,101 @@
+# ============================================================================
+# Codex CLI Configuration for tael-ai
+# ============================================================================
+# Bootstrapped via /codex-config init 2026-04-25.
+# Workflow: Claude (this session) drives architecture and integrates;
+# Codex executes delegated tasks via the agent-codex skill.
+# Ozzy is the final arbiter for contested calls.
+#
+# Model selection rule (Ozzy, 2026-04-25):
+#   default            gpt-5.5 / high    → build, refactor, debug, test
+#   profile `fast`     gpt-5.5 / medium  → review and check passes ONLY
+#   profile `thorough` gpt-5.5 / xhigh   → hardest architectural decisions
+# Never invoke `fast` for building. Never invoke the default for trivial
+# review-only passes. Pick the profile to match the work.
+# ============================================================================
+
+# Core settings
+model = "gpt-5.5"
+model_reasoning_effort = "high"
+sandbox = "workspace-write"
+approval_policy = "on-failure"
+
+# Optional feature flags
+web_search = "live"
+
+[features]
+# Enable other features as needed
+
+# ============================================================================
+# Curated MCP servers (verified package names)
+# ============================================================================
+# All disabled initially per the "prefer minimal MCP enablement" guidance.
+# Enable with: /codex-config enable-mcp <name>
+# Likely first add for this Swift/macOS project: context7 (Apple docs lookup).
+
+# Context7 documentation MCP — Swift, Apple, SDK docs lookup.
+[mcp_servers.context7]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp"]
+startup_timeout_sec = 10
+tool_timeout_sec = 60
+
+# XcodeBuildMCP (Sentry) — 78+ Xcode/SPM/simulator tools.
+# Requires macOS 14.5+ and Xcode 16+. Higher timeouts because
+# xcodebuild and simulator ops are slow.
+[mcp_servers.xcodebuild]
+command = "npx"
+args = ["-y", "xcodebuildmcp@latest", "mcp"]
+startup_timeout_sec = 30
+tool_timeout_sec = 300
+
+# Playwright MCP
+# [mcp_servers.playwright]
+# command = "npx"
+# args = ["-y", "@playwright/mcp"]
+# startup_timeout_sec = 15
+# tool_timeout_sec = 120
+
+# PostgreSQL MCP
+# Required: DATABASE_URL
+# [mcp_servers.postgres]
+# command = "npx"
+# args = ["-y", "@modelcontextprotocol/server-postgres"]
+# startup_timeout_sec = 10
+# tool_timeout_sec = 60
+
+# Filesystem MCP (grant explicit allowed paths)
+# [mcp_servers.filesystem]
+# command = "npx"
+# args = ["-y", "@modelcontextprotocol/server-filesystem", "/allowed/path"]
+# startup_timeout_sec = 5
+# tool_timeout_sec = 30
+
+# GitHub MCP over SSE (OAuth). First use prompts for browser auth.
+[mcp_servers.github]
+type = "sse"
+url = "https://mcp.github.com/sse"
+
+# ============================================================================
+# Profiles
+# ============================================================================
+
+# Review and check passes only — NOT for building.
+[profiles.fast]
+model = "gpt-5.5"
+model_reasoning_effort = "medium"
+
+# Hardest architectural decisions and multi-file reasoning.
+[profiles.thorough]
+model = "gpt-5.5"
+model_reasoning_effort = "xhigh"
+
+# [profiles.security]
+# model = "gpt-5.5"
+# model_reasoning_effort = "xhigh"
+# sandbox = "read-only"
+
+# [profiles.automated]
+# model = "gpt-5.5"
+# approval_policy = "never"
+# sandbox = "workspace-write"

@@ -1,0 +1,75 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+*.xcuserdata
+*.xcuserdatad/
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Xcode workspace user data
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Packages/
+Package.pins
+*.xcframework/
+SourcePackages/
+
+# Provisioning / signing artifacts (do not commit)
+*.mobileprovision
+*.p12
+*.cer
+*.pem
+*.key
+secrets/
+.env
+.env.local
+
+# CocoaPods (not used yet, but reserved)
+Pods/
+Podfile.lock
+
+# Carthage (not used)
+Carthage/Build/
+
+# fastlane (not used yet)
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# IDEs / editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs and dumps
+*.log
+*.crash
+
+# Local invocation logs (TAEL local-only debug)
+TAELLogs/
