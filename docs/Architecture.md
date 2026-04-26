@@ -37,7 +37,7 @@ TAELMacAgent (menubar app, native macOS)
 │                                  missing permissions.
 ├── Capture
 │   ├── ScreenshotTarget.swift     displayContainingCursor / mainDisplay
-│   ├── CapturedScreenshot.swift   Value type wrapping CGImage + metadata
+│   ├── CapturedScreenshot.swift   Screenshot value type + metadata
 │   └── ScreenCaptureService.swift Stub. Real SCScreenshotManager call
 │                                  lands in PR 2, ticket 8. Requires a
 │                                  PermissionGrant of kind .screenRecording.

@@ -18,11 +18,11 @@ import Foundation
 import CoreGraphics
 #endif
 
-public protocol PermissionsCheckerProtocol: Sendable {
+public protocol PermissionChecking: Sendable {
     func status(for kind: PermissionKind) async -> PermissionStatus
 }
 
-public final class PermissionsChecker: PermissionsCheckerProtocol {
+public final class PermissionsChecker: PermissionChecking {
     public init() {}
 
     public func status(for kind: PermissionKind) async -> PermissionStatus {
@@ -44,16 +44,17 @@ public final class PermissionsChecker: PermissionsCheckerProtocol {
         // `CGRequestScreenCaptureAccess` here — prompting is the gate
         // UI's job, not the checker's.
         //
+        // Apple's preflight returns `false` for BOTH "user denied" AND
+        // "never asked." We can't distinguish those two without a
+        // prompting call, so the honest mapping is `.notDetermined`.
+        // The gate UI surfaces the recovery path either way.
+        //
         // Note: in some macOS 14 minor versions, preflight can return
         // `true` even when ScreenCaptureKit later fails. PR 2 may add
         // an `SCShareableContent` sanity probe on top of preflight.
-        if CGPreflightScreenCaptureAccess() {
-            return .granted
-        } else {
-            return .denied
-        }
+        return CGPreflightScreenCaptureAccess() ? .granted : .notDetermined
         #else
-        return .denied
+        return .notDetermined
         #endif
     }
 }

@@ -6,7 +6,7 @@
 //
 //    1. `withPermission` does NOT invoke the operation when status is
 //       not `.granted`. It throws `PermissionError.missing` and routes
-//       through `PermissionGateUI.showGate`.
+//       through `PermissionGatePresenting.showGate`.
 //    2. `withPermission` invokes the operation EXACTLY once on
 //       `.granted`, and the closure receives a `PermissionGrant`
 //       whose `kind` matches the requested kind.
@@ -25,7 +25,7 @@ final class PermissionsGateTests: XCTestCase {
 
     // MARK: - Test doubles
 
-    private actor StubChecker: PermissionsCheckerProtocol {
+    private actor StubChecker: PermissionChecking {
         private var statuses: [PermissionKind: PermissionStatus]
         private(set) var queryCount: Int = 0
 
@@ -39,7 +39,7 @@ final class PermissionsGateTests: XCTestCase {
         }
     }
 
-    private actor SpyUI: PermissionGateUI {
+    private actor SpyUI: PermissionGatePresenting {
         private(set) var shownKinds: [PermissionKind] = []
 
         func showGate(for kind: PermissionKind) async {
@@ -143,5 +143,31 @@ final class PermissionsGateTests: XCTestCase {
 
         let shown = await ui.shownKinds
         XCTAssertTrue(shown.isEmpty, "Gate UI must not appear when the operation itself errors.")
+    }
+
+    // MARK: - Unimplemented kind path
+
+    func test_withPermission_whenKindNotImplemented_throwsNotImplemented_andDoesNotShowGate() async {
+        let checker = StubChecker([:])  // empty: status() defaults to .notDetermined for any kind
+        let ui = SpyUI()
+        let gate = PermissionsGate(checker: checker, permissionUI: ui)
+
+        var operationRan = false
+
+        do {
+            _ = try await gate.withPermission(.microphone) { _ in
+                operationRan = true
+                return ()
+            }
+            XCTFail("Expected PermissionError.notImplemented to be thrown.")
+        } catch let error as PermissionError {
+            XCTAssertEqual(error, .notImplemented(.microphone))
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+
+        XCTAssertFalse(operationRan, "Operation must not run for unimplemented kinds.")
+        let shown = await ui.shownKinds
+        XCTAssertTrue(shown.isEmpty, "Gate UI must not appear for unimplemented kinds — there is nothing the user can grant.")
     }
 }

@@ -66,7 +66,7 @@ struct PermissionGrant {
 final class PermissionsGate {
     func withPermission<T>(
         _ kind: PermissionKind,
-        operation: @escaping (PermissionGrant) async throws -> T
+        operation: (PermissionGrant) async throws -> T
     ) async throws -> T {
         let status = await checker.status(for: kind)
 
@@ -84,7 +84,7 @@ Protected services require the grant:
 
 ```swift
 final class ScreenCaptureService {
-    func captureDisplayScreenshot(_ grant: PermissionGrant) async throws -> CGImage {
+    func captureDisplayScreenshot(_ grant: PermissionGrant) async throws -> CapturedScreenshot {
         precondition(grant.kind == .screenRecording)
         // Week 1 implementation later.
     }

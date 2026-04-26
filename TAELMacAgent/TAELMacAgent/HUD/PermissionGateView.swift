@@ -14,6 +14,7 @@ import SwiftUI
 
 struct PermissionGateView: View {
     let kind: PermissionKind
+    let onCancel: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -31,7 +32,7 @@ struct PermissionGateView: View {
                 .keyboardShortcut(.defaultAction)
 
                 Button("Cancel") {
-                    NSApp.keyWindow?.close()
+                    onCancel()
                 }
             }
 

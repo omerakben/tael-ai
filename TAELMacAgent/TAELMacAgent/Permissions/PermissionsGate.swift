@@ -24,7 +24,7 @@ import Foundation
 /// `PermissionsGate.withPermission` (in this file) can mint one.
 /// Protected services should accept a `PermissionGrant` and
 /// `precondition` on the kind they expect.
-public struct PermissionGrant: Sendable, Hashable {
+public struct PermissionGrant: Sendable, Equatable {
     public let kind: PermissionKind
 
     fileprivate init(kind: PermissionKind) {
@@ -32,22 +32,22 @@ public struct PermissionGrant: Sendable, Hashable {
     }
 }
 
-// MARK: - Permission gate UI
+// MARK: - Permission gate presenting
 
 /// Minimal hook the gate uses to surface a permission sheet to the
 /// user. The HUD layer provides the real implementation; tests inject
 /// a stub.
 ///
 /// The method is `async` (no actor isolation in the protocol itself)
-/// so non-UI conformers (`NoopPermissionGateUI`, test spies) don't
+/// so non-UI conformers (`NoopPermissionGatePresenter`, test spies) don't
 /// need to hop. UI conformers (e.g. `HUDPanelController`) hop to
 /// `@MainActor` explicitly inside the implementation.
-public protocol PermissionGateUI: Sendable {
+public protocol PermissionGatePresenting: Sendable {
     func showGate(for kind: PermissionKind) async
 }
 
-/// No-op UI used when the gate runs in a non-UI context (tests, CLI).
-public struct NoopPermissionGateUI: PermissionGateUI {
+/// No-op presenter used when the gate runs in a non-UI context (tests, CLI).
+public struct NoopPermissionGatePresenter: PermissionGatePresenting {
     public init() {}
     public func showGate(for kind: PermissionKind) async {}
 }
@@ -55,12 +55,12 @@ public struct NoopPermissionGateUI: PermissionGateUI {
 // MARK: - PermissionsGate
 
 public final class PermissionsGate: Sendable {
-    private let checker: PermissionsCheckerProtocol
-    private let permissionUI: PermissionGateUI
+    private let checker: PermissionChecking
+    private let permissionUI: PermissionGatePresenting
 
     public init(
-        checker: PermissionsCheckerProtocol = PermissionsChecker(),
-        permissionUI: PermissionGateUI = NoopPermissionGateUI()
+        checker: PermissionChecking = PermissionsChecker(),
+        permissionUI: PermissionGatePresenting = NoopPermissionGatePresenter()
     ) {
         self.checker = checker
         self.permissionUI = permissionUI
@@ -81,6 +81,14 @@ public final class PermissionsGate: Sendable {
         _ kind: PermissionKind,
         operation: (PermissionGrant) async throws -> T
     ) async throws -> T {
+        // Unimplemented kinds short-circuit before the checker. Showing
+        // a "grant Microphone" sheet for a kind we don't actually wire
+        // is misleading — the user can't recover. Throw a typed error
+        // so callers can branch on "not yet supported" vs "user denied".
+        guard kind.isImplemented else {
+            throw PermissionError.notImplemented(kind)
+        }
+
         let status = await checker.status(for: kind)
 
         guard status == .granted else {

@@ -22,6 +22,6 @@ public enum PermissionStatus: String, Sendable, Hashable {
     /// Note: PR 1's gate UI receives only `PermissionKind`, not status,
     /// so it cannot yet differentiate `.restricted` from `.denied` in
     /// the presented sheet — that hook lands when status is threaded
-    /// through `PermissionGateUI`.
+    /// through `PermissionGatePresenting`.
     case restricted
 }
