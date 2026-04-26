@@ -27,6 +27,12 @@ final class HUDPanelController: NSObject, PermissionGatePresenting {
         presentNew(content: HUDView())
     }
 
+    func present(screenshot: CapturedScreenshot) {
+        // Task 7 fills this in. Stub so Task 6's AppDelegate wiring
+        // compiles in its own commit.
+        showPlaceholder()
+    }
+
     /// `PermissionGatePresenting` implementation: show a sheet-like HUD that
     /// explains the missing permission and links to System Settings.
     /// `nonisolated` so it satisfies the non-isolated protocol
