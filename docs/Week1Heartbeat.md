@@ -1,5 +1,7 @@
 # Week 1 heartbeat
 
+> **Status (2026-04-26): heartbeat shipped in PR 2.** Hotkey ⌘⇧T → PermissionsGate.withPermission(.screenRecording) → SCScreenshotManager.captureImage → non-activating NSPanel HUD with the captured CGImage. See `docs/ManualTestChecklist.md` PR-2.* cases for verification.
+
 The Week 1 heartbeat is the **only thing** Week 1 has to prove.
 
 ```
