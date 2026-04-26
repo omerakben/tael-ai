@@ -33,7 +33,23 @@ public enum ScreenCaptureError: Error, Equatable {
     case captureFailed(String)
 }
 
-public final class ScreenCaptureService {
+/// Minimal protocol the hotkey/wiring layer depends on. Lets tests
+/// inject a mock that returns a synthetic `CapturedScreenshot` without
+/// pulling in ScreenCaptureKit or requiring a real TCC grant.
+public protocol DisplayScreenshotCapturing: Sendable {
+    func captureDisplayScreenshot(
+        _ grant: PermissionGrant,
+        target: ScreenshotTarget
+    ) async throws -> CapturedScreenshot
+}
+
+public extension DisplayScreenshotCapturing {
+    func captureDisplayScreenshot(_ grant: PermissionGrant) async throws -> CapturedScreenshot {
+        try await captureDisplayScreenshot(grant, target: .week1Default)
+    }
+}
+
+public final class ScreenCaptureService: DisplayScreenshotCapturing {
     public init() {}
 
     /// Capture a screenshot of `target`, falling back to `.mainDisplay`
@@ -43,7 +59,7 @@ public final class ScreenCaptureService {
     /// is the contract that PR 2 will fill in.
     public func captureDisplayScreenshot(
         _ grant: PermissionGrant,
-        target: ScreenshotTarget = .week1Default
+        target: ScreenshotTarget
     ) async throws -> CapturedScreenshot {
         precondition(
             grant.kind == .screenRecording,
