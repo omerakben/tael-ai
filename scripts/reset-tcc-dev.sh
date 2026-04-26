@@ -68,22 +68,25 @@ for svc in "${SERVICES[@]}"; do
   # We capture combined output and the exit code so we can distinguish
   # the typical "no existing entry" case (suppress, keep going) from
   # real failures like an unknown service name (warn loudly).
-  output=$("${cmd[@]}" 2>&1)
-  rc=$?
-  if [[ $rc -eq 0 ]]; then
-    continue
-  fi
+  #
+  # Note: the `if !` form is REQUIRED. A bare `output=$(...); rc=$?` would
+  # let `set -e` abort the whole script on the first non-zero tccutil
+  # exit, making the rest of this block dead code. Bash flips `$?` after
+  # `!`, so PIPESTATUS preserves the original tccutil exit code.
+  if ! output=$("${cmd[@]}" 2>&1); then
+    rc=${PIPESTATUS[0]}
 
-  # tccutil's "nothing to reset" message looks like:
-  #   tccutil: Failed to reset all approval status for ai.tael.macagent
-  # That is benign — there was simply no entry yet. Anything else is
-  # surfaced and counted as a real failure so debugging is not hidden.
-  if [[ "$output" == *"Failed to reset"* ]]; then
-    echo "  (no existing entry for ${svc}, skipping)"
-  else
-    echo "  warning: tccutil exited ${rc} for ${svc}:" >&2
-    echo "  ${output}" >&2
-    had_real_failure=1
+    # tccutil's "nothing to reset" message looks like:
+    #   tccutil: Failed to reset all approval status for ai.tael.macagent
+    # That is benign — there was simply no entry yet. Anything else is
+    # surfaced and counted as a real failure so debugging is not hidden.
+    if [[ "$output" == *"Failed to reset"* ]]; then
+      echo "  (no existing entry for ${svc}, skipping)"
+    else
+      echo "  warning: tccutil exited ${rc} for ${svc}:" >&2
+      echo "  ${output}" >&2
+      had_real_failure=1
+    fi
   fi
 done
 
