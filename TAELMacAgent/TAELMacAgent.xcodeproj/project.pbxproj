@@ -24,6 +24,7 @@
 		CACD72769410271CF6577CC0 /* InvocationLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74AE945B8920595491B2B29 /* InvocationLog.swift */; };
 		CF17A6BDF21FD1B3F8690D13 /* PermissionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED47D03840F40871272ED13C /* PermissionError.swift */; };
 		D4D7892F3C39042079C92DEC /* PermissionsChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D36CFA939327054CE038538 /* PermissionsChecker.swift */; };
+		DF3BAB13D3897B30011FF8B2 /* HUDScreenshotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659ECE5A728C28C51E500F35 /* HUDScreenshotView.swift */; };
 		E22538B7BAFDD6DE67CD39A6 /* PermissionKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3601A9D97DFCC20CB1B190 /* PermissionKind.swift */; };
 		EE4E5F822C40DF6233CBDD2A /* ScreenshotTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C80394C10DB95ACE8B23410 /* ScreenshotTarget.swift */; };
 		F213518191A0D0FBED62E67B /* ScreenCaptureService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198A12FCDFC021700C887DC3 /* ScreenCaptureService.swift */; };
@@ -50,6 +51,7 @@
 		3900941745D06B0194400E8E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		422D881643EB42E6E96F6073 /* PermissionGateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionGateView.swift; sourceTree = "<group>"; };
 		639F88F50828EB01F823718B /* PermissionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionStatus.swift; sourceTree = "<group>"; };
+		659ECE5A728C28C51E500F35 /* HUDScreenshotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDScreenshotView.swift; sourceTree = "<group>"; };
 		69DDCCAE89FD5A160E17AE49 /* TAELMacAgentApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TAELMacAgentApp.swift; sourceTree = "<group>"; };
 		6C80394C10DB95ACE8B23410 /* ScreenshotTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTarget.swift; sourceTree = "<group>"; };
 		6DEC30773055C5F4AE735610 /* CapturedScreenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturedScreenshot.swift; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 			isa = PBXGroup;
 			children = (
 				9363E4D91044162835D20FAA /* HUDPanelController.swift */,
+				659ECE5A728C28C51E500F35 /* HUDScreenshotView.swift */,
 				1469160F2705F009163C15E0 /* HUDView.swift */,
 				422D881643EB42E6E96F6073 /* PermissionGateView.swift */,
 			);
@@ -289,6 +292,7 @@
 				0B0660E9860988CD91DA599E /* AppDelegate.swift in Sources */,
 				0330637AAF26CC3C25DCD10F /* CapturedScreenshot.swift in Sources */,
 				8AC8665020F765D063A96609 /* HUDPanelController.swift in Sources */,
+				DF3BAB13D3897B30011FF8B2 /* HUDScreenshotView.swift in Sources */,
 				F8A8B61233E0F29CD0725388 /* HUDView.swift in Sources */,
 				6AB4701304241B41166818BB /* HotkeyManager.swift in Sources */,
 				9565442421E66D83C0B03CDF /* HotkeyName.swift in Sources */,

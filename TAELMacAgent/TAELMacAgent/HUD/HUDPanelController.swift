@@ -28,9 +28,7 @@ final class HUDPanelController: NSObject, PermissionGatePresenting {
     }
 
     func present(screenshot: CapturedScreenshot) {
-        // Task 7 fills this in. Stub so Task 6's AppDelegate wiring
-        // compiles in its own commit.
-        showPlaceholder()
+        presentNew(content: HUDScreenshotView(screenshot: screenshot))
     }
 
     /// `PermissionGatePresenting` implementation: show a sheet-like HUD that
