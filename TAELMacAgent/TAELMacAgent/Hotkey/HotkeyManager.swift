@@ -24,14 +24,6 @@ final class HotkeyManager {
         }
     }
 
-    /// Backwards-compatible alias for the PR 1 call site. Removed in
-    /// the same commit that updates `AppDelegate` to call
-    /// `installBinding()` directly (Task 6).
-    @available(*, deprecated, renamed: "installBinding")
-    func installPlaceholderBinding() {
-        installBinding()
-    }
-
     func tearDown() {
         KeyboardShortcuts.disable(.toggleTAEL)
         onTrigger = nil
