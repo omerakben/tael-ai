@@ -11,6 +11,7 @@
 		033A279961698D88188A33AD /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD624AFDCE20EF4B613B9A4 /* MenuBarController.swift */; };
 		0B0660E9860988CD91DA599E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB704571A9597F9AF9313D65 /* AppDelegate.swift */; };
 		1EFB0EA699153ADC53EA4286 /* LocalLogServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C654DA20715C3C6F29B9E6F4 /* LocalLogServiceTests.swift */; };
+		2BAF280AA3FB18E55785FAD8 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 271157EB2BA4172C872A7408 /* KeyboardShortcuts */; };
 		34F3D8094B35A969BEFEFE4A /* LocalLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F5C315999DFCC84BE675BE2 /* LocalLogService.swift */; };
 		3F34E0D14D96EB8D52BE71A0 /* TAELMacAgentApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DDCCAE89FD5A160E17AE49 /* TAELMacAgentApp.swift */; };
 		5AD70596B8B5BEBD936F2F60 /* PermissionsGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14306A2EBDA587DA5C4E6182 /* PermissionsGateTests.swift */; };
@@ -63,6 +64,17 @@
 		ED47D03840F40871272ED13C /* PermissionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionError.swift; sourceTree = "<group>"; };
 		F46F76B62679E79E964F4EAE /* PermissionsGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsGate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B46A07C92351F24C2BF9395E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2BAF280AA3FB18E55785FAD8 /* KeyboardShortcuts in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		1D955BDFBFFB1E992ABC4E95 /* TAELMacAgentTests */ = {
@@ -182,6 +194,7 @@
 			buildPhases = (
 				A804338716259752E11524FD /* Sources */,
 				D18C72E98AF490A89259C1D9 /* Resources */,
+				B46A07C92351F24C2BF9395E /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -189,6 +202,7 @@
 			);
 			name = TAELMacAgent;
 			packageProductDependencies = (
+				271157EB2BA4172C872A7408 /* KeyboardShortcuts */,
 			);
 			productName = TAELMacAgent;
 			productReference = 09182C33476D9D80D775700D /* TAELMacAgent.app */;
@@ -239,6 +253,9 @@
 			);
 			mainGroup = 79CF0DC83C35B3DE92D7BB44;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				85553E6FF0113F1817B596E9 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C965C9197045CDCA448A4FB4 /* Products */;
 			projectDirPath = "";
@@ -534,6 +551,25 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		85553E6FF0113F1817B596E9 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		271157EB2BA4172C872A7408 /* KeyboardShortcuts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 85553E6FF0113F1817B596E9 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
+			productName = KeyboardShortcuts;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5D9768FD172621FBD47CDD94 /* Project object */;
 }

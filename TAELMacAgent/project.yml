@@ -8,6 +8,11 @@ options:
   generateEmptyDirectories: false
   defaultConfig: Debug
 
+packages:
+  KeyboardShortcuts:
+    url: https://github.com/sindresorhus/KeyboardShortcuts
+    from: "2.0.0"
+
 settings:
   base:
     # Swift language *mode* (not toolchain version). Xcode's
@@ -31,6 +36,8 @@ targets:
     type: application
     platform: macOS
     deploymentTarget: "14.0"
+    dependencies:
+      - package: KeyboardShortcuts
     sources:
       - path: TAELMacAgent
         excludes:
