@@ -38,7 +38,6 @@ global hotkey -> PermissionsGate -> SCScreenshotManager -> NSPanel HUD with scre
 
 If the app cannot prove hotkey-to-screenshot by day 5, stop and diagnose before adding more scope.
 
-
 ### 1.1 v0.2 implementation freeze amendments
 
 These amendments are locked before repo creation:
@@ -53,7 +52,6 @@ These amendments are locked before repo creation:
 - Represent executable actions as structured executable + argv arrays, not raw shell strings.
 - Track context size, token estimates, and latency from the first planner integration.
 - Keep product naming unresolved until after the technical heartbeat works.
-
 
 ---
 
@@ -2417,7 +2415,6 @@ Mitigation:
 - no consumer productivity sprawl.
 
 ---
-
 
 ## 23. v0.2 implementation amendments before coding
 

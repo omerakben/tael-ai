@@ -25,6 +25,7 @@ git checkout develop && git pull origin develop && \
   git checkout -b feature/pr2-week1-heartbeat && \
   git push -u origin feature/pr2-week1-heartbeat
 ```
+
 Expected: `Switched to a new branch 'feature/pr2-week1-heartbeat'`, branch tracks origin.
 
 ---
@@ -34,6 +35,7 @@ Expected: `Switched to a new branch 'feature/pr2-week1-heartbeat'`, branch track
 ### Task 1: Add `KeyboardShortcuts` SPM dependency via XcodeGen
 
 **Files:**
+
 - Modify: `TAELMacAgent/project.yml`
 - Modify (regenerated): `TAELMacAgent/TAELMacAgent.xcodeproj/project.pbxproj`
 - Modify (created by Xcode/SPM resolve): `TAELMacAgent/TAELMacAgent.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved`
@@ -72,6 +74,7 @@ Then in the `targets.TAELMacAgent` block, add a `dependencies` key:
 ```bash
 command -v xcodegen >/dev/null && echo OK || brew install xcodegen
 ```
+
 Expected: `OK`, or `xcodegen` installed via Homebrew.
 
 - [ ] **Step 3: Regenerate `.xcodeproj`**
@@ -79,6 +82,7 @@ Expected: `OK`, or `xcodegen` installed via Homebrew.
 ```bash
 make xcodeproj
 ```
+
 Expected: XcodeGen prints `Created project at ...TAELMacAgent.xcodeproj`. The pbxproj will now include the package reference, product dependency, and Frameworks build phase entry.
 
 - [ ] **Step 4: Resolve SPM dependencies**
@@ -86,6 +90,7 @@ Expected: XcodeGen prints `Created project at ...TAELMacAgent.xcodeproj`. The pb
 ```bash
 xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj -resolvePackageDependencies
 ```
+
 Expected: `Resolved source packages`. Creates/updates `Package.resolved`.
 
 - [ ] **Step 5: Build to confirm KeyboardShortcuts links cleanly**
@@ -95,6 +100,7 @@ xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj \
   -scheme TAELMacAgent -configuration Debug \
   -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO build
 ```
+
 Expected: BUILD SUCCEEDED. No source code uses `KeyboardShortcuts` yet, but the link should succeed.
 
 - [ ] **Step 6: Commit**
@@ -119,6 +125,7 @@ Regenerated pbxproj via 'make xcodeproj' (XcodeGen)."
 ### Task 2: Define `DisplayScreenshotCapturing` protocol and conform `ScreenCaptureService`
 
 **Files:**
+
 - Modify: `TAELMacAgent/TAELMacAgent/Capture/ScreenCaptureService.swift`
 
 **Why:** the hotkey wire-up in Task 6 needs to be unit-testable, but the real `ScreenCaptureService` requires TCC Screen Recording grant. A thin protocol lets Task 7's tests inject a mock without touching ScreenCaptureKit. **Do NOT pull the type into a separate file** — keep it co-located with the service per the same file-locality principle that protects `PermissionGrant` from forgery (the protocol+default is the public surface; the implementation stays one read away).
@@ -180,6 +187,7 @@ xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj \
   -scheme TAELMacAgent -configuration Debug \
   -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO test
 ```
+
 Expected: BUILD SUCCEEDED, all 8 existing tests still pass. The protocol extraction is a refactor — behavior is unchanged.
 
 - [ ] **Step 4: Commit**
@@ -201,6 +209,7 @@ Type stays co-located with the service per file-locality discipline."
 ### Task 3: Replace `notImplemented` stub with real `SCScreenshotManager` capture
 
 **Files:**
+
 - Modify: `TAELMacAgent/TAELMacAgent/Capture/ScreenCaptureService.swift`
 
 **Why:** ticket 8. Replace the stub body. The PR 2 outline comment in the file already describes the shape; this task fills it in.
@@ -349,6 +358,7 @@ xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj \
   -scheme TAELMacAgent -configuration Debug \
   -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO test
 ```
+
 Expected: BUILD SUCCEEDED, all 8 existing tests still pass. The body change is not exercised by any current test (it's the production capture path).
 
 - [ ] **Step 6: Commit**
@@ -376,6 +386,7 @@ Manual verification via 'make run' after Task 6 wires the hotkey."
 ### Task 4: Add `KeyboardShortcuts.Name` extension
 
 **Files:**
+
 - Create: `TAELMacAgent/TAELMacAgent/Hotkey/HotkeyName.swift`
 
 **Why:** the KeyboardShortcuts API requires shortcut names declared as `KeyboardShortcuts.Name` static properties. Co-locate the name in its own small file under `Hotkey/` so it's findable.
@@ -423,6 +434,7 @@ xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj \
   -scheme TAELMacAgent -configuration Debug \
   -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO build
 ```
+
 Expected: BUILD SUCCEEDED.
 
 - [ ] **Step 4: Commit**
@@ -441,6 +453,7 @@ via KeyboardShortcuts.onKeyDown."
 ### Task 5: Replace `HotkeyManager` placeholder with real registration
 
 **Files:**
+
 - Modify: `TAELMacAgent/TAELMacAgent/Hotkey/HotkeyManager.swift`
 
 **Why:** ticket 6. Currently `installPlaceholderBinding()` is a no-op; PR 2 wires it through `KeyboardShortcuts.onKeyDown(for:)`.
@@ -490,6 +503,7 @@ xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj \
   -scheme TAELMacAgent -configuration Debug \
   -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO build
 ```
+
 Expected: BUILD SUCCEEDED. There's still a call site in `AppDelegate` to `installPlaceholderBinding()` that no longer exists — Task 6 fixes it. If you want a passing build between tasks, temporarily rename the call site too; otherwise commit Task 5 + Task 6 together.
 
 **Decision:** for cleaner per-task commits, keep `installPlaceholderBinding` as a deprecated alias that just calls `installBinding`. Replace Step 1's file with this version instead:
@@ -545,6 +559,7 @@ xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj \
   -scheme TAELMacAgent -configuration Debug \
   -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO test
 ```
+
 Expected: 8 tests pass.
 
 - [ ] **Step 4: Commit**
@@ -568,6 +583,7 @@ commit's build green; removed when AppDelegate updates in Task 6."
 ### Task 6: Wire `AppDelegate` — hotkey → gate → capture → HUD + log
 
 **Files:**
+
 - Modify: `TAELMacAgent/TAELMacAgent/App/AppDelegate.swift`
 
 **Why:** ticket 9. This is the heartbeat itself. The closure assigned to `hotkeyManager.onTrigger` runs the gate, captures, presents to HUD, records a log row.
@@ -705,6 +721,7 @@ xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj \
   -scheme TAELMacAgent -configuration Debug \
   -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO build
 ```
+
 Expected: BUILD SUCCEEDED, no deprecation warning. The change references `installBinding()` (Task 5) and a new `hudController.present(screenshot:)` method (added in Task 7).
 
 **Will fail at this point** — `HUDPanelController.present(screenshot:)` doesn't exist yet. That's expected; the next task adds it. **Do not commit Task 6 alone.** Commit Task 6 + Task 7 together OR add a stub `present(screenshot:)` to HUDPanelController in this commit and flesh it out in Task 7.
@@ -730,6 +747,7 @@ xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj \
   -scheme TAELMacAgent -configuration Debug \
   -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO test
 ```
+
 Expected: 8 tests pass.
 
 - [ ] **Step 4: Commit**
@@ -759,6 +777,7 @@ as a stub; Task 7 fleshes out the real screenshot rendering."
 ### Task 7: HUD screenshot rendering
 
 **Files:**
+
 - Create: `TAELMacAgent/TAELMacAgent/HUD/HUDScreenshotView.swift`
 - Modify: `TAELMacAgent/TAELMacAgent/HUD/HUDPanelController.swift`
 
@@ -830,6 +849,7 @@ xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj \
   -scheme TAELMacAgent -configuration Debug \
   -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO build
 ```
+
 Expected: BUILD SUCCEEDED.
 
 - [ ] **Step 4: Run tests**
@@ -839,6 +859,7 @@ xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj \
   -scheme TAELMacAgent -configuration Debug \
   -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO test
 ```
+
 Expected: 8 tests pass.
 
 - [ ] **Step 5: Commit**
@@ -863,11 +884,13 @@ HUDPanelController.present(screenshot:) replaces the Task 6 stub."
 ### Task 8: Wire-up tests via `DisplayScreenshotCapturing` mock (TDD)
 
 **Files:**
+
 - Create: `TAELMacAgent/TAELMacAgentTests/HotkeyHandlerTests.swift`
 
 **Why:** the hotkey path orchestrates four collaborators (gate, capture service, HUD, log). Without tests, regressions in the wire-up only surface in manual testing. The `DisplayScreenshotCapturing` protocol from Task 2 makes this mockable. Tests live in their own file because they exercise a different surface than `PermissionsGateTests`.
 
 **Caveat:** `AppDelegate.handleHotkeyInvocation` is `private`. Two options:
+
 1. Make it `internal` and `@testable import` — simpler but expands the API.
 2. Extract the body into a free function or a small `HotkeyInvocationHandler` type that AppDelegate composes — testable in isolation, no privacy widening.
 
@@ -1148,6 +1171,7 @@ xcodebuild test \
   CODE_SIGNING_ALLOWED=NO \
   -only-testing:TAELMacAgentTests/HotkeyHandlerTests
 ```
+
 Expected: 3 tests pass.
 
 - [ ] **Step 5: Run the full suite**
@@ -1157,6 +1181,7 @@ xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj \
   -scheme TAELMacAgent -configuration Debug \
   -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO test
 ```
+
 Expected: 11 tests pass (5 PermissionsGate + 3 LocalLogService + 3 HotkeyHandler).
 
 - [ ] **Step 6: Commit**
@@ -1185,6 +1210,7 @@ capture-failure (no present, log errored)."
 ### Task 9: Remove the `installPlaceholderBinding` deprecated alias
 
 **Files:**
+
 - Modify: `TAELMacAgent/TAELMacAgent/Hotkey/HotkeyManager.swift`
 
 **Why:** Task 5's deprecated alias was scaffolding for clean per-task commits. Now that `AppDelegate` calls `installBinding()` directly (Task 6), the alias is dead.
@@ -1205,6 +1231,7 @@ In `TAELMacAgent/TAELMacAgent/Hotkey/HotkeyManager.swift`, delete:
 ```bash
 grep -rn "installPlaceholderBinding" TAELMacAgent/
 ```
+
 Expected: zero matches.
 
 - [ ] **Step 3: Build and test**
@@ -1214,6 +1241,7 @@ xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj \
   -scheme TAELMacAgent -configuration Debug \
   -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO test
 ```
+
 Expected: 11 tests pass, no warnings.
 
 - [ ] **Step 4: Commit**
@@ -1233,6 +1261,7 @@ Task 6 updated the AppDelegate call site. Both tasks have landed."
 ### Task 10: Update `ManualTestChecklist.md` and `Week1Heartbeat.md`
 
 **Files:**
+
 - Modify: `docs/ManualTestChecklist.md`
 - Modify: `docs/Week1Heartbeat.md`
 
@@ -1324,6 +1353,7 @@ xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj \
   -scheme TAELMacAgent -configuration Debug \
   -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO clean test
 ```
+
 Expected: 11 tests pass.
 
 - [ ] **Step 2: Confirm the branch is ahead of develop**
@@ -1331,6 +1361,7 @@ Expected: 11 tests pass.
 ```bash
 git log origin/develop..HEAD --oneline
 ```
+
 Expected: 10 commits (Task 1 + Tasks 2–10), one per task, conventional-commit format.
 
 - [ ] **Step 3: Push**
@@ -1386,6 +1417,7 @@ Plan: \`docs/superpowers/plans/2026-04-26-pr2-week1-heartbeat.md\`. Codex-driven
 EOF
 )"
 ```
+
 Expected: PR URL printed. Notify Ozzy.
 
 ---
@@ -1395,12 +1427,14 @@ Expected: PR URL printed. Notify Ozzy.
 After writing the plan and before handing off:
 
 **1. Spec coverage:**
+
 - v0.3 §12.2 Week 1 deliverables: menubar app ✓ (PR 1), KeyboardShortcuts (Task 1), global hotkey works (Tasks 4–6), PermissionsChecker (PR 1), PermissionsGate (PR 1), Screen Recording gate (PR 1 + Task 6 wire-up), Week 1 screenshot target (Task 3 cursor + fallback), SCScreenshotManager.captureImage (Task 3), explicit width/height (Task 3 backingScaleFactor), NSPanel HUD displays image (Task 7). All covered.
 - v0.3 §23.5 first-13 tickets: 6 (KeyboardShortcuts) → Tasks 1, 4, 5; 8 (ScreenCaptureService real) → Task 3; 9 (wire-up) → Task 6; 10 (HUD render) → Task 7; 11 (InvocationLog) → Task 6 wire + records via logService. All covered.
 
 **2. Placeholder scan:** No "TBD", "implement later", "add appropriate error handling" patterns. Each step has concrete code or commands.
 
 **3. Type consistency:**
+
 - `DisplayScreenshotCapturing` is the protocol name in Tasks 2, 3, 6, 8. ✓
 - `KeyboardShortcuts.Name.toggleTAEL` declared in Task 4, used in Task 5. ✓
 - `HotkeyInvocationHandler` introduced in Task 8 (extraction); `AppDelegate.handleHotkeyInvocation` from Task 6 is replaced by the handler — Task 8 explicitly removes it. ✓
