@@ -26,6 +26,7 @@
 		2B00000000000000000000B2 /* LocalLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000B2 /* LocalLogService.swift */; };
 		2B00000000000000000000B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000B3 /* Assets.xcassets */; };
 		2B00000000000000000000C1 /* PermissionsGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000C1 /* PermissionsGateTests.swift */; };
+		2B00000000000000000000C2 /* LocalLogServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000000000000000000C2 /* LocalLogServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 		1A00000000000000000000B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1A00000000000000000000B5 /* TAELMacAgent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TAELMacAgent.entitlements; sourceTree = "<group>"; };
 		1A00000000000000000000C1 /* PermissionsGateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsGateTests.swift; sourceTree = "<group>"; };
+		1A00000000000000000000C2 /* LocalLogServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLogServiceTests.swift; sourceTree = "<group>"; };
 		1A00000000000000000000F1 /* TAELMacAgent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TAELMacAgent.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A00000000000000000000F2 /* TAELMacAgentTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TAELMacAgentTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -178,6 +180,7 @@
 			isa = PBXGroup;
 			children = (
 				1A00000000000000000000C1 /* PermissionsGateTests.swift */,
+				1A00000000000000000000C2 /* LocalLogServiceTests.swift */,
 			);
 			path = TAELMacAgentTests;
 			sourceTree = "<group>";
@@ -315,6 +318,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2B00000000000000000000C1 /* PermissionsGateTests.swift in Sources */,
+				2B00000000000000000000C2 /* LocalLogServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
