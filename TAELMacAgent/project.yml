@@ -38,10 +38,6 @@ targets:
           - "Resources/TAELMacAgent.entitlements"
     resources:
       - path: TAELMacAgent/Resources/Assets.xcassets
-    info:
-      path: TAELMacAgent/Resources/Info.plist
-    entitlements:
-      path: TAELMacAgent/Resources/TAELMacAgent.entitlements
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: ai.tael.macagent
