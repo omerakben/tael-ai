@@ -108,6 +108,7 @@ final class HotkeyHandlerTests: XCTestCase {
         let logs = await logService.recent(10)
         XCTAssertEqual(logs.count, 1)
         XCTAssertEqual(logs.first?.gateOutcome, .denied)
+        XCTAssertNil(logs.first?.gateLatencyMs)
         XCTAssertNotNil(logs.first?.errorDescription)
 
         // The gate still surfaces the UI on missing permission.
@@ -140,6 +141,7 @@ final class HotkeyHandlerTests: XCTestCase {
         let logs = await logService.recent(10)
         XCTAssertEqual(logs.count, 1)
         XCTAssertEqual(logs.first?.gateOutcome, .errored)
+        XCTAssertNotNil(logs.first?.gateLatencyMs)
         XCTAssertEqual(logs.first?.errorDescription, "captureFailed(\"simulated\")")
     }
 }

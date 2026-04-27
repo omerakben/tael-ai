@@ -36,10 +36,12 @@ struct HotkeyInvocationHandler {
     func run() async {
         let started = now()
         let gateStart = started
+        var gateLatencyMs: Double?
 
         do {
             let screenshot = try await permissionsGate.withPermission(.screenRecording) { grant in
                 let gateEnd = self.now()
+                gateLatencyMs = gateEnd.timeIntervalSince(gateStart) * 1000
                 let captureStart = gateEnd
                 let result = try await screenCaptureService.captureDisplayScreenshot(grant, target: .week1Default)
                 let captureEnd = self.now()
@@ -47,7 +49,7 @@ struct HotkeyInvocationHandler {
                 await logService.record(InvocationLog(
                     hotkeyTimestamp: started,
                     gateOutcome: .granted,
-                    gateLatencyMs: gateEnd.timeIntervalSince(gateStart) * 1000,
+                    gateLatencyMs: gateLatencyMs,
                     captureLatencyMs: captureEnd.timeIntervalSince(captureStart) * 1000,
                     targetDescription: "\(result.target) \(result.width)x\(result.height)"
                 ))
@@ -67,12 +69,10 @@ struct HotkeyInvocationHandler {
                 errorDescription: error.localizedDescription
             ))
         } catch {
-            // Use case-form so debug-mode log inspection sees
-            // `captureFailed("…")` rather than the generic NSError-bridged
-            // string that Swift errors get without LocalizedError.
             await logService.record(InvocationLog(
                 hotkeyTimestamp: started,
                 gateOutcome: .errored,
+                gateLatencyMs: gateLatencyMs,
                 errorDescription: String(describing: error)
             ))
             Self.log.error("Hotkey invocation failed: \(error.localizedDescription, privacy: .public)")
