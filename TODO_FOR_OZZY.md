@@ -6,28 +6,19 @@ the pain if these are not resolved.
 
 ## Signing and identity
 
-- [ ] **Set Apple Developer Team ID in Xcode.**
-  The project ships with `DEVELOPMENT_TEAM` left blank. Open
-  `TAELMacAgent/TAELMacAgent.xcodeproj` → project → `TAELMacAgent` target →
-  Signing & Capabilities → set Team. Do **not** select "Sign to Run Locally"
-  (ad-hoc) for daily dev — TCC permissions are keyed to bundle identity
-  and signing requirements; ad-hoc signing makes Screen Recording /
-  Accessibility / Microphone debugging noisy and irreproducible.
-- [ ] **Choose preferred local signing identity.**
-  Apple Development is correct for Debug builds. Confirm which
-  developer account / identity is used so the team can avoid
-  flapping TCC entries. Document it in `docs/PermissionNotes.md`
-  once chosen.
-- [ ] **Confirm bundle ID `ai.tael.macagent` is acceptable long-term.**
-  Used as the stable TCC identity. Changing it later resets all
-  granted permissions on every dev machine.
+- [x] **Set Apple Developer Team ID in Xcode.**
+  Set 2026-04-26. Team: OMER FARUK AKBEN, Team ID: 4X8U3NCLQ8.
+  Automatic signing enabled, Development certificate.
+- [x] **Choose preferred local signing identity.**
+  Confirmed 2026-04-26. Apple Development (automatic), paid Apple
+  Developer Program (Individual). Signing Certificate: Development.
+- [x] **Confirm bundle ID `ai.tael.macagent` is acceptable long-term.**
+  Confirmed 2026-04-26. Used as the stable TCC identity.
 
 ## Repo and naming
 
-- [ ] **Confirm repo name `tael-ai` should remain, or move to
-  `tael-mac-agent` later.** The macOS app is `TAELMacAgent` regardless,
-  but the repo name is flexible until the wider TAEL surface area
-  (`tuel-ai`, `toel-ai`) starts existing.
+- [x] **Confirm repo name `tael-ai` should remain.**
+  Confirmed 2026-04-26. Keeping `tael-ai`.
 - [ ] **Confirm GitHub Issues should be created manually or via CLI.**
   Maestro Claude does not have `gh` access and does not auto-open
   Issues from this run. Week 1 ticket checklist lives in
@@ -47,27 +38,12 @@ the pain if these are not resolved.
 
 ## Build / test status from PR 1
 
-- [ ] **Run `xcodebuild` locally.**
-  This run was performed in a Linux container with no Xcode toolchain.
-  `xcodebuild`, `swift build`, and `swiftformat` were not available, so
-  the project was not compiled here. Source files follow the v0.3 layout
-  and the `PermissionsGate` tokenized pattern, but a real Xcode build
-  on macOS 14.0+ is the only ground truth. To verify:
-
-  ```bash
-  xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj \
-             -scheme TAELMacAgent \
-             -configuration Debug \
-             -destination 'platform=macOS' \
-             clean build
-  xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj \
-             -scheme TAELMacAgent \
-             -destination 'platform=macOS' \
-             test
-  ```
-
-  Expected: clean build, all `TAELMacAgentTests` pass, app launches as a
-  menubar utility, Quit menu works.
+- [x] **Run `xcodebuild` locally.**
+  Verified 2026-04-26. Clean build succeeds. All 11 tests pass
+  (3 HotkeyHandler, 3 LocalLogService, 5 PermissionsGate).
+  App launches as menubar utility. Permission gate HUD confirmed
+  working. Quit menu works. Required fix: set
+  `GENERATE_INFOPLIST_FILE = YES` on TAELMacAgentTests target.
 
 ## Future, intentionally deferred
 
