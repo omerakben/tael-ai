@@ -4,7 +4,7 @@
 //
 
 import AppKit
-import SwiftUI
+import Foundation
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
@@ -12,7 +12,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var hotkeyManager: HotkeyManager?
     private var hudController: HUDPanelController?
     private var permissionsGate: PermissionsGate?
-    private var screenCaptureService: ScreenCaptureService?
+    private var screenCaptureService: DisplayScreenshotCapturing?
     private var logService: LocalLogService?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -46,12 +46,25 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         menuBarController.install()
 
-        // PR 1: do NOT register a real global hotkey yet. The hotkey
-        // package + the hotkey → gate → capture wire-up land in PR 2
-        // (Week 1 tickets 6–9). For now, only the placeholder callback
-        // exists, so launching the app does not call any protected
-        // API.
-        hotkeyManager.installPlaceholderBinding()
+        // Hotkey closure: gate → capture → HUD + log. Runs on the main
+        // actor (the `@MainActor` class isolation already covers it).
+        hotkeyManager.onTrigger = { [weak self] in
+            guard let self,
+                  let permissionsGate = self.permissionsGate,
+                  let screenCaptureService = self.screenCaptureService,
+                  let hudController = self.hudController,
+                  let logService = self.logService else { return }
+            let handler = HotkeyInvocationHandler(
+                permissionsGate: permissionsGate,
+                screenCaptureService: screenCaptureService,
+                presentScreenshot: { shot in hudController.present(screenshot: shot) },
+                logService: logService
+            )
+            Task { @MainActor in
+                await handler.run()
+            }
+        }
+        hotkeyManager.installBinding()
     }
 
     func applicationWillTerminate(_ notification: Notification) {

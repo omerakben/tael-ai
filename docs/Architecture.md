@@ -7,7 +7,7 @@ sections 8 and 13.
 
 ## What exists today
 
-```
+```text
 TAELMacAgent (menubar app, native macOS)
 ├── App
 │   ├── TAELMacAgentApp.swift     SwiftUI App entry
@@ -73,7 +73,7 @@ boundary**, not a polite convention.
 
 ## Week 1 heartbeat (target, not yet wired)
 
-```
+```text
 global hotkey                                                (HotkeyManager)
   → PermissionsGate.withPermission(.screenRecording) { grant in
       → SCScreenshotManager.captureImage(contentFilter:configuration:)

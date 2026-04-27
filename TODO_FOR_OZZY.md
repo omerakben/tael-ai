@@ -53,6 +53,7 @@ the pain if these are not resolved.
   the project was not compiled here. Source files follow the v0.3 layout
   and the `PermissionsGate` tokenized pattern, but a real Xcode build
   on macOS 14.0+ is the only ground truth. To verify:
+
   ```bash
   xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj \
              -scheme TAELMacAgent \
@@ -64,6 +65,7 @@ the pain if these are not resolved.
              -destination 'platform=macOS' \
              test
   ```
+
   Expected: clean build, all `TAELMacAgentTests` pass, app launches as a
   menubar utility, Quit menu works.
 
@@ -78,3 +80,48 @@ These are *not* PR 1 problems but Ozzy-side decisions that will land soon:
   vs hand-rolled. PR 2 will need to add it via SPM.
 - [ ] Decide on a HUD design language. PR 1 ships an intentionally
   ugly placeholder.
+
+## PR-3 follow-up items from PR #18 review
+
+The 5-agent review of PR #18 surfaced these gaps. They were
+deliberately not bundled into PR 2 because each one either
+exceeds Week 1 scope, touches behavior the v0.3 §23.4 acceptance
+test does not require, or is a test-quality improvement that
+adds value without blocking the heartbeat. Pick them up in PR 3
+or as small follow-ups — none of them are urgent in isolation.
+
+- [ ] **User-facing error HUD on capture failure.**
+  Today `HotkeyInvocationHandler.run()` writes an `InvocationLog`
+  row and `os.log` line on capture failure, then returns silently.
+  v0.3 §23.4 only requires "does not crash," but the UX intent of
+  the heartbeat is feedback. Add an `HUDErrorView(message:)` and a
+  `presentError: (String) -> Void` closure on the handler, parallel
+  to `presentScreenshot`. Wire it from `AppDelegate`. Source: `silent-failure-hunter` review of PR #18.
+- [ ] **Hotkey closure teardown race.**
+  In `AppDelegate.swift:51-66` the hotkey closure early-returns
+  silently if any of `permissionsGate`, `screenCaptureService`,
+  `hudController`, `logService` is nil — only happens during
+  `applicationWillTerminate` race. Add at minimum
+  `Self.log.error("Hotkey fired but app state unavailable")` in the
+  guard's `else`. Source: `silent-failure-hunter` review of PR #18.
+- [ ] **Concurrent invocation guard.**
+  Two rapid hotkey presses spawn two concurrent `Task { await
+  handler.run() }` blocks. The slower one wins the HUD. If
+  invocation #1 succeeds late and #2 fails fast, the user sees
+  invocation #1's screenshot with no signal that the most recent
+  press failed. Add an in-flight token on the handler (or
+  `HotkeyManager` debounce). Source: `silent-failure-hunter` IMPORTANT
+  4 + `pr-test-analyzer` #7 from PR #18 review.
+- [ ] **Test: deterministic-clock latency assertions.**
+  `HotkeyHandlerTests` currently asserts `XCTAssertNotNil` on
+  `gateLatencyMs` / `captureLatencyMs`. Inject a deterministic
+  `now: () -> Date` (the handler already accepts one) and assert
+  exact ms values, ordering (`gateLatencyMs >= 0`,
+  `gateLatencyMs + captureLatencyMs <= elapsed`), and units
+  (regression-proof against a missing `* 1000`). Source:
+  `pr-test-analyzer` #2.
+- [ ] **Test: `.notImplemented` → `.restricted` mapping.**
+  `HotkeyInvocationHandler.swift` maps `PermissionError.notImplemented`
+  to `gateOutcome = .restricted`. No test exercises this branch.
+  Add a stub gate that throws `.notImplemented` and assert the
+  outcome is `.restricted`. Source: `pr-test-analyzer` #1.

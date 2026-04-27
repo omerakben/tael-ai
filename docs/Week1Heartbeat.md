@@ -1,8 +1,10 @@
 # Week 1 heartbeat
 
+> **Status (2026-04-26): heartbeat shipped in PR 2.** Hotkey ⌘⇧T → PermissionsGate.withPermission(.screenRecording) → SCScreenshotManager.captureImage → non-activating NSPanel HUD with the captured CGImage. See `docs/ManualTestChecklist.md` PR-2.* cases for verification.
+
 The Week 1 heartbeat is the **only thing** Week 1 has to prove.
 
-```
+```text
 global hotkey
   → PermissionsGate
   → SCScreenshotManager.captureImage(contentFilter:configuration:)
@@ -100,7 +102,7 @@ AX work and starts in Week 2.
 
 The capture path **must** use:
 
-```
+```swift
 SCScreenshotManager.captureImage(contentFilter:configuration:)
 ```
 
@@ -109,7 +111,7 @@ overload is macOS 15.2+, and our deployment target is macOS 14.0+.
 
 ## What Week 1 explicitly excludes
 
-```
+```text
 No AI planner.
 No speech capture.
 No WhisperKit.

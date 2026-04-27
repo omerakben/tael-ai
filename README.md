@@ -40,7 +40,7 @@ heartbeat and the Week 1 implementation ticket order.
 
 ## Layout
 
-```
+```text
 tael-ai/
   README.md
   .gitignore

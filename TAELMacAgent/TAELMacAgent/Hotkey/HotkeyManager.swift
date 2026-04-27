@@ -2,36 +2,30 @@
 //  HotkeyManager.swift
 //  TAELMacAgent
 //
-//  Global hotkey owner. PR 1 contains only a placeholder binding hook
-//  (no real registration), so the app can launch without pulling in a
-//  third-party package and without calling any protected API.
-//
-//  PR 2 (Week 1 ticket 6) adds the `KeyboardShortcuts` SPM package and
-//  registers a real shortcut that calls `onTrigger`.
+//  Owns the global hotkey registration via the KeyboardShortcuts
+//  package. The actual work (gate → capture → HUD) is the closure
+//  assigned to `onTrigger` by `AppDelegate`.
 //
 
 import Foundation
+import KeyboardShortcuts
 
 @MainActor
 final class HotkeyManager {
-    /// Set by the wiring code in `AppDelegate` once the gate, capture
-    /// service, and HUD exist. PR 1 leaves this nil-by-default; PR 2
-    /// will assign a closure that runs:
-    ///
-    ///     try await permissionsGate.withPermission(.screenRecording) { grant in
-    ///         let shot = try await screenCaptureService
-    ///             .captureDisplayScreenshot(grant)
-    ///         hudController.present(shot)
-    ///     }
+    /// Set by `AppDelegate` to the gate→capture→HUD closure.
+    /// Read inside the KeyboardShortcuts callback.
     var onTrigger: (() -> Void)?
 
-    /// PR 1 no-op binding. Exists so the call site in `AppDelegate`
-    /// can be wired now and the PR 2 change is purely additive.
-    func installPlaceholderBinding() {
-        // Intentionally empty.
+    /// Registers the real global hotkey with KeyboardShortcuts.
+    /// Call once during `applicationDidFinishLaunching`.
+    func installBinding() {
+        KeyboardShortcuts.onKeyDown(for: .toggleTAEL) { [weak self] in
+            self?.onTrigger?()
+        }
     }
 
     func tearDown() {
+        KeyboardShortcuts.disable(.toggleTAEL)
         onTrigger = nil
     }
 }

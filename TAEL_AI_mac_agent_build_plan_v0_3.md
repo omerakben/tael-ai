@@ -38,7 +38,6 @@ global hotkey -> PermissionsGate -> SCScreenshotManager -> NSPanel HUD with scre
 
 If the app cannot prove hotkey-to-screenshot by day 5, stop and diagnose before adding more scope.
 
-
 ### 1.1 v0.3 implementation freeze amendments
 
 These amendments are locked before repo creation:
@@ -58,7 +57,6 @@ These amendments are locked before repo creation:
 - Week 1 `PermissionsChecker` implements Screen Recording only. Accessibility and Microphone may exist as enum placeholders, but they are not real checks until their milestones.
 - `PermissionsGate` uses a tokenized closure boundary: protected services accept a `PermissionGrant`, not casual public calls.
 - First commit is only the native macOS menubar scaffold plus policy docs. Screenshot capture starts after the scaffold commit.
-
 
 ---
 
@@ -2446,7 +2444,6 @@ Mitigation:
 
 ---
 
-
 ## 23. v0.3 implementation amendments before coding
 
 ### 23.1 Deployment target
@@ -2688,7 +2685,6 @@ Use `dev.git.commit_preview` for Skill 3. The user thinks “commit this.” The
 
 ---
 
-
 ### 23.10 ScreenCaptureKit implementation notes for Week 1
 
 For macOS 14.0+, the Week 1 screenshot service uses:
@@ -2871,7 +2867,6 @@ tael-mac-agent
 ```
 
 Do not use `tael-ai` for the prototype repo. `tael-ai` is reserved for possible umbrella website, docs, backend, and brand assets later.
-
 
 ## 24. Final build checklist
 

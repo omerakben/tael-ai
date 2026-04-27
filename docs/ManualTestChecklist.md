@@ -39,6 +39,56 @@ when PR 2 lands.
 | W1.11 | Press hotkey with cursor on a Cursor / VS Code window | Screenshot includes that window |
 | W1.12 | Inspect `LocalLogService` after several invocations | Each invocation has a row with hotkey ts, gate result, capture timing, target display metadata |
 
+## PR 2 — Week 1 heartbeat manual cases
+
+### PR-2.1 First-launch Screen Recording prompt
+
+- Quit TAEL if running.
+- `scripts/reset-tcc-dev.sh` to clear ai.tael.macagent's TCC entries.
+- Open `TAELMacAgent/TAELMacAgent.xcodeproj` in Xcode and Run, or `xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj -scheme TAELMacAgent -configuration Debug -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO build` then launch the built `.app`.
+- Press ⌘⇧T while Terminal is focused.
+- Expected: PermissionGateView appears with "TAEL needs Screen Recording permission" and "Open System Settings" / "Cancel" buttons.
+
+### PR-2.2 Cancel button dismisses the gate
+
+- From PR-2.1's gate, click "Cancel".
+- Expected: panel disappears within ~100ms, no crash.
+
+### PR-2.3 Granted path captures and renders
+
+- Click "Open System Settings" in the gate, grant Screen Recording for TAELMacAgent, quit/relaunch TAEL.
+- Press ⌘⇧T.
+- Expected: HUD appears within ~500ms showing the cursor display's screenshot at max 720x480 with caption "Captured WIDTHxHEIGHT — cursor display".
+- Expected: HUD does not steal focus from Terminal/VS Code/Cursor.
+
+### PR-2.4 Multi-monitor — cursor display selection
+
+- With two displays, move the cursor to the secondary display.
+- Press ⌘⇧T.
+- Expected: HUD shows the secondary display's content, caption says "cursor display".
+
+### PR-2.5 Multi-monitor — main display fallback
+
+- Disconnect or disable the secondary display while the cursor was on it (edge case; requires a hotplug or display-arrangement change).
+- Press ⌘⇧T.
+- Expected: HUD shows the main display, caption says "main display (fallback)".
+
+### PR-2.6 Full-screen app
+
+- Make a Terminal or VS Code window full-screen.
+- Press ⌘⇧T.
+- Expected: HUD appears as an overlay; full-screen app stays focused; HUD shows the captured screenshot.
+
+### PR-2.7 No screenshot persistence
+
+- After PR-2.3, check `~/Library/Application Support/TAELMacAgent/` and the project root.
+- Expected: no PNG/JPEG files created. Screenshots are in-memory only.
+
+### PR-2.8 Invocation log fields
+
+- After several invocations, attach a debugger to TAELMacAgent and inspect `LocalLogService.recent()`.
+- Expected: each row has hotkeyTimestamp, gateOutcome, gateLatencyMs, captureLatencyMs, targetDescription. Granted-path rows have all four numeric fields populated.
+
 ## TCC reset for clean re-test
 
 ```bash
