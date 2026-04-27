@@ -44,8 +44,8 @@ when PR 2 lands.
 ### PR-2.1 First-launch Screen Recording prompt
 
 - Quit TAEL if running.
-- `make tcc-reset` to clear ai.tael.macagent's TCC entries.
-- `make run`.
+- `scripts/reset-tcc-dev.sh` to clear ai.tael.macagent's TCC entries.
+- Open `TAELMacAgent/TAELMacAgent.xcodeproj` in Xcode and Run, or `xcodebuild -project TAELMacAgent/TAELMacAgent.xcodeproj -scheme TAELMacAgent -configuration Debug -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO build` then launch the built `.app`.
 - Press ⌘⇧T while Terminal is focused.
 - Expected: PermissionGateView appears with "TAEL needs Screen Recording permission" and "Open System Settings" / "Cancel" buttons.
 

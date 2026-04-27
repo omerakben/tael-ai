@@ -116,8 +116,8 @@ public final class ScreenCaptureService: DisplayScreenshotCapturing {
         let scale = NSScreen.screens
             .first { ($0.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID) == display.displayID }?
             .backingScaleFactor ?? 2.0
-        cfg.width = display.width * Int(scale)
-        cfg.height = display.height * Int(scale)
+        cfg.width = Int((CGFloat(display.width) * scale).rounded())
+        cfg.height = Int((CGFloat(display.height) * scale).rounded())
         cfg.showsCursor = true
         cfg.queueDepth = 1
 

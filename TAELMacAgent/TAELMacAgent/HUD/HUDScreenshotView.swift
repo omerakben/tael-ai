@@ -2,9 +2,7 @@
 //  HUDScreenshotView.swift
 //  TAELMacAgent
 //
-//  Displays a CapturedScreenshot inside the HUD. PR 2: the shot is
-//  shown at a fixed maximum size so a full 5K display still fits in a
-//  reasonable HUD. Aspect ratio preserved.
+//  Caps screenshots at 720x480 so a full 5K display still fits in the HUD.
 //
 
 import SwiftUI

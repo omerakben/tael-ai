@@ -2,9 +2,8 @@
 //  HotkeyInvocationHandler.swift
 //  TAELMacAgent
 //
-//  Single invocation of the Week 1 heartbeat: gate → capture → HUD +
-//  log. Extracted from AppDelegate so the wire-up is unit-testable
-//  without spinning up a real menubar or NSPanel.
+//  Single invocation of the gate → capture → HUD pipeline.
+//  Lives outside `AppDelegate` so it can be unit-tested without a menubar or NSPanel.
 //
 
 import Foundation
