@@ -11,17 +11,14 @@ This is an **architectural rule**, not a guideline.
 | Surface | Examples | TCC permission | Status in PR 1 |
 |---|---|---|---|
 | Screen capture | `SCScreenshotManager`, `CGDisplayStream`, `CGWindowListCreateImage` | Screen Recording | **Active** — gated through `PermissionsGate` with `.screenRecording`. |
-| Accessibility tree | `AXUIElement*`, `AXObserver*` | Accessibility | Future. Enum placeholder only; no real check yet. |
+| Accessibility tree | `AXUIElement*`, `AXObserver*` | Accessibility | **Active (PR 4)** — gated through `PermissionsGate` with `.accessibility`. PR 4 lands the permission check (`AXIsProcessTrusted`); the actual AX tree read lands in PR 5. |
 | Microphone | `AVAudioEngine`, `AVCaptureDevice` (audio) | Microphone | Future. Enum placeholder only. |
 | Apple Events / scripting | `NSAppleScript`, `OSAScript`, `appleScriptObjectSpecifier` | Apple Events / Automation | Future. Enum placeholder only. |
 | Keyboard/mouse synthesis | `CGEvent.post`, `CGEventTapCreate` | Input Monitoring / Accessibility | Future. Enum placeholder only. |
 | Subprocess execution | `Process()`, `posix_spawn`, `system()` | n/a (but treated as protected by `SafetyPolicy`) | Future. Not in PR 1. Will go through `SafeExecutor`. |
 | Clipboard write | `NSPasteboard.general.set*` | n/a (but treated as protected by `SafetyPolicy`) | Future. Not in PR 1. Will go through `ClipboardExecutor`. |
 
-For PR 1, only Screen Recording is active. The rest are future policy
-entries — their enum cases exist (so the gate has a complete vocabulary)
-but `PermissionsChecker` does not query them, and no service consumes
-their grants yet.
+For PR 4, Screen Recording and Accessibility are active. Microphone, Apple Events, and Input Monitoring remain future policy entries — their enum cases exist (so the gate has a complete vocabulary) but `PermissionsChecker` does not query them, and no service consumes their grants yet.
 
 ## How the gate works
 

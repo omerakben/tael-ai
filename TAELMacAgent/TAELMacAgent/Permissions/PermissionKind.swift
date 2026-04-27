@@ -23,8 +23,8 @@ public enum PermissionKind: String, CaseIterable, Sendable, Hashable {
     /// kind in the current build. PR 1: only screen recording is real.
     public var isImplemented: Bool {
         switch self {
-        case .screenRecording: return true
-        case .accessibility, .microphone, .appleEvents, .inputMonitoring:
+        case .screenRecording, .accessibility: return true
+        case .microphone, .appleEvents, .inputMonitoring:
             return false
         }
     }

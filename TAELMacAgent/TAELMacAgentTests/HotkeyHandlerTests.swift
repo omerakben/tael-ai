@@ -194,9 +194,10 @@ final class HotkeyHandlerTests: XCTestCase {
     // MARK: - Not-implemented kind
 
     func test_run_whenKindNotImplemented_doesNotCapture_logsRestricted() async {
-        // Use a kind whose isImplemented returns false today (Week 1
-        // implements only .screenRecording). The gate throws .notImplemented
-        // before any capture work runs.
+        // Use a kind whose isImplemented returns false today (Week 1 implements
+        // .screenRecording, PR 4 implements .accessibility; .microphone,
+        // .appleEvents, .inputMonitoring stay placeholders until their
+        // milestones).
         let checker = StubChecker(.granted)
         let ui = SpyUI()
         let gate = PermissionsGate(checker: checker, permissionUI: ui)
@@ -209,7 +210,7 @@ final class HotkeyHandlerTests: XCTestCase {
             screenCaptureService: capture,
             presentScreenshot: { presented.append($0) },
             logService: logService,
-            kind: .accessibility
+            kind: .microphone
         )
 
         await handler.run()

@@ -11,6 +11,7 @@
 		033A279961698D88188A33AD /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD624AFDCE20EF4B613B9A4 /* MenuBarController.swift */; };
 		06ADDF6182CAEDB9CC8191F9 /* HotkeyHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600507D8811CFB057BB49AA4 /* HotkeyHandlerTests.swift */; };
 		354AC58980118264F0FF7B67 /* HotkeyManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BA73F54C69186834610D30 /* HotkeyManagerTests.swift */; };
+		925C4AADEDDDF4182FB89AF8 /* PermissionsCheckerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3391ED18AB6186A614671A75 /* PermissionsCheckerTests.swift */; };
 		0B0660E9860988CD91DA599E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB704571A9597F9AF9313D65 /* AppDelegate.swift */; };
 		1EFB0EA699153ADC53EA4286 /* LocalLogServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C654DA20715C3C6F29B9E6F4 /* LocalLogServiceTests.swift */; };
 		2BAF280AA3FB18E55785FAD8 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 271157EB2BA4172C872A7408 /* KeyboardShortcuts */; };
@@ -56,6 +57,7 @@
 		422D881643EB42E6E96F6073 /* PermissionGateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionGateView.swift; sourceTree = "<group>"; };
 		600507D8811CFB057BB49AA4 /* HotkeyHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyHandlerTests.swift; sourceTree = "<group>"; };
 		11BA73F54C69186834610D30 /* HotkeyManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManagerTests.swift; sourceTree = "<group>"; };
+		3391ED18AB6186A614671A75 /* PermissionsCheckerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsCheckerTests.swift; sourceTree = "<group>"; };
 		639F88F50828EB01F823718B /* PermissionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionStatus.swift; sourceTree = "<group>"; };
 		659ECE5A728C28C51E500F35 /* HUDScreenshotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDScreenshotView.swift; sourceTree = "<group>"; };
 		A366B091A2CF78B079314AE1 /* HUDErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDErrorView.swift; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 				600507D8811CFB057BB49AA4 /* HotkeyHandlerTests.swift */,
 				11BA73F54C69186834610D30 /* HotkeyManagerTests.swift */,
 				C654DA20715C3C6F29B9E6F4 /* LocalLogServiceTests.swift */,
+				3391ED18AB6186A614671A75 /* PermissionsCheckerTests.swift */,
 				14306A2EBDA587DA5C4E6182 /* PermissionsGateTests.swift */,
 			);
 			path = TAELMacAgentTests;
@@ -331,6 +334,7 @@
 				06ADDF6182CAEDB9CC8191F9 /* HotkeyHandlerTests.swift in Sources */,
 				354AC58980118264F0FF7B67 /* HotkeyManagerTests.swift in Sources */,
 				1EFB0EA699153ADC53EA4286 /* LocalLogServiceTests.swift in Sources */,
+				925C4AADEDDDF4182FB89AF8 /* PermissionsCheckerTests.swift in Sources */,
 				5AD70596B8B5BEBD936F2F60 /* PermissionsGateTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
