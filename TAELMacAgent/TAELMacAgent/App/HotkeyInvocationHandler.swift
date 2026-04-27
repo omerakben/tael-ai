@@ -16,19 +16,22 @@ struct HotkeyInvocationHandler {
     let presentScreenshot: (CapturedScreenshot) -> Void
     let logService: LocalLogService
     let now: () -> Date
+    let kind: PermissionKind
 
     init(
         permissionsGate: PermissionsGate,
         screenCaptureService: any DisplayScreenshotCapturing,
         presentScreenshot: @escaping (CapturedScreenshot) -> Void,
         logService: LocalLogService,
-        now: @escaping () -> Date = Date.init
+        now: @escaping () -> Date = Date.init,
+        kind: PermissionKind = .screenRecording
     ) {
         self.permissionsGate = permissionsGate
         self.screenCaptureService = screenCaptureService
         self.presentScreenshot = presentScreenshot
         self.logService = logService
         self.now = now
+        self.kind = kind
     }
 
     private static let log = Logger(subsystem: "ai.tael.macagent", category: "HotkeyInvocationHandler")
@@ -39,7 +42,7 @@ struct HotkeyInvocationHandler {
         var gateLatencyMs: Double?
 
         do {
-            let screenshot = try await permissionsGate.withPermission(.screenRecording) { grant in
+            let screenshot = try await permissionsGate.withPermission(kind) { grant in
                 let gateEnd = self.now()
                 gateLatencyMs = gateEnd.timeIntervalSince(gateStart) * 1000
                 let captureStart = gateEnd

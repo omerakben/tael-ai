@@ -144,4 +144,43 @@ final class HotkeyHandlerTests: XCTestCase {
         XCTAssertNotNil(logs.first?.gateLatencyMs)
         XCTAssertEqual(logs.first?.errorDescription, "captureFailed(\"simulated\")")
     }
+
+    // MARK: - Not-implemented kind
+
+    func test_run_whenKindNotImplemented_doesNotCapture_logsRestricted() async {
+        // Use a kind whose isImplemented returns false today (Week 1
+        // implements only .screenRecording). The gate throws .notImplemented
+        // before any capture work runs.
+        let checker = StubChecker(.granted)
+        let ui = SpyUI()
+        let gate = PermissionsGate(checker: checker, permissionUI: ui)
+        let capture = SpyCapture(stub: makeStubScreenshot())
+        let logService = LocalLogService(capacity: 16)
+
+        var presented: [CapturedScreenshot] = []
+        let handler = HotkeyInvocationHandler(
+            permissionsGate: gate,
+            screenCaptureService: capture,
+            presentScreenshot: { presented.append($0) },
+            logService: logService,
+            kind: .accessibility
+        )
+
+        await handler.run()
+
+        let observed = await capture.observedTargets()
+        XCTAssertTrue(observed.isEmpty, "Capture must not run when kind is unimplemented")
+        XCTAssertTrue(presented.isEmpty)
+
+        let logs = await logService.recent(10)
+        XCTAssertEqual(logs.count, 1)
+        XCTAssertEqual(logs.first?.gateOutcome, .restricted)
+        XCTAssertNil(logs.first?.gateLatencyMs, "gate didn't grant; latency must stay nil")
+        XCTAssertNotNil(logs.first?.errorDescription)
+
+        // The gate does NOT show UI for .notImplemented (per the existing
+        // PermissionsGateTests contract: not-implemented is silent).
+        let shown = await ui.shownKinds
+        XCTAssertTrue(shown.isEmpty)
+    }
 }
