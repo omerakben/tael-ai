@@ -66,38 +66,30 @@ test does not require, or is a test-quality improvement that
 adds value without blocking the heartbeat. Pick them up in PR 3
 or as small follow-ups — none of them are urgent in isolation.
 
-- [ ] **User-facing error HUD on capture failure.**
-  Today `HotkeyInvocationHandler.run()` writes an `InvocationLog`
-  row and `os.log` line on capture failure, then returns silently.
-  v0.3 §23.4 only requires "does not crash," but the UX intent of
-  the heartbeat is feedback. Add an `HUDErrorView(message:)` and a
-  `presentError: (String) -> Void` closure on the handler, parallel
-  to `presentScreenshot`. Wire it from `AppDelegate`. Source: `silent-failure-hunter` review of PR #18.
-- [ ] **Hotkey closure teardown race.**
-  In `AppDelegate.swift:51-66` the hotkey closure early-returns
-  silently if any of `permissionsGate`, `screenCaptureService`,
-  `hudController`, `logService` is nil — only happens during
-  `applicationWillTerminate` race. Add at minimum
-  `Self.log.error("Hotkey fired but app state unavailable")` in the
-  guard's `else`. Source: `silent-failure-hunter` review of PR #18.
-- [ ] **Concurrent invocation guard.**
-  Two rapid hotkey presses spawn two concurrent `Task { await
-  handler.run() }` blocks. The slower one wins the HUD. If
-  invocation #1 succeeds late and #2 fails fast, the user sees
-  invocation #1's screenshot with no signal that the most recent
-  press failed. Add an in-flight token on the handler (or
-  `HotkeyManager` debounce). Source: `silent-failure-hunter` IMPORTANT
-  4 + `pr-test-analyzer` #7 from PR #18 review.
-- [ ] **Test: deterministic-clock latency assertions.**
-  `HotkeyHandlerTests` currently asserts `XCTAssertNotNil` on
-  `gateLatencyMs` / `captureLatencyMs`. Inject a deterministic
-  `now: () -> Date` (the handler already accepts one) and assert
-  exact ms values, ordering (`gateLatencyMs >= 0`,
-  `gateLatencyMs + captureLatencyMs <= elapsed`), and units
-  (regression-proof against a missing `* 1000`). Source:
-  `pr-test-analyzer` #2.
-- [ ] **Test: `.notImplemented` → `.restricted` mapping.**
-  `HotkeyInvocationHandler.swift` maps `PermissionError.notImplemented`
-  to `gateOutcome = .restricted`. No test exercises this branch.
-  Add a stub gate that throws `.notImplemented` and assert the
-  outcome is `.restricted`. Source: `pr-test-analyzer` #1.
+- [x] **User-facing error HUD on capture failure.**
+  Shipped 2026-04-26 in PR-3 (Task 6). `HUDErrorView` + a `presentError`
+  closure on `HotkeyInvocationHandler`, wired through `HUDPanelController`
+  and `AppDelegate`. Permission-error path intentionally does not call
+  `presentError` — `PermissionsGate` already shows the gate UI.
+- [x] **Hotkey closure teardown race.**
+  Shipped 2026-04-26 in PR-3 (Task 4). `AppDelegate.log` is now
+  `private static let` so the guard's `else` clause can log
+  `"Hotkey fired but app state unavailable; ignoring"` without a `self`
+  reference. Folded into the same commit as the concurrent-invocation guard.
+- [x] **Concurrent invocation guard.**
+  Shipped 2026-04-26 in PR-3 (Task 4). `HotkeyManager.onTrigger` is now
+  `() async -> Void`; the manager wraps the closure in a `Task` and gates
+  on a private `isInFlight` flag. Re-entrant presses during a slow capture
+  are dropped silently. New `HotkeyManagerTests` cover the in-flight drop,
+  the post-completion fire-again, and `tearDown` clearing state.
+- [x] **Test: deterministic-clock latency assertions.**
+  Shipped 2026-04-26 in PR-3 (Task 3). `StubClock` pops dates from a fixed
+  sequence and is wired through the handler's existing `now:` parameter.
+  Granted-path test asserts exact 100ms gate + 200ms capture; capture-
+  failure test asserts 50ms gate latency is retained across the failure.
+- [x] **Test: `.notImplemented` → `.restricted` mapping.**
+  Shipped 2026-04-26 in PR-3 (Task 2). `HotkeyInvocationHandler` accepts
+  a `kind: PermissionKind` init parameter (default `.screenRecording` —
+  no production behavior change). New test passes `.accessibility` (whose
+  `isImplemented` returns false in Week 1) and asserts the gate throws
+  `.notImplemented`, the handler logs `.restricted`, and no UI is shown.
