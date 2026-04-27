@@ -14,6 +14,7 @@ struct HotkeyInvocationHandler {
     let permissionsGate: PermissionsGate
     let screenCaptureService: any DisplayScreenshotCapturing
     let presentScreenshot: (CapturedScreenshot) -> Void
+    let presentError: (String) -> Void
     let logService: LocalLogService
     let now: () -> Date
     let kind: PermissionKind
@@ -22,6 +23,7 @@ struct HotkeyInvocationHandler {
         permissionsGate: PermissionsGate,
         screenCaptureService: any DisplayScreenshotCapturing,
         presentScreenshot: @escaping (CapturedScreenshot) -> Void,
+        presentError: @escaping (String) -> Void = { _ in },
         logService: LocalLogService,
         now: @escaping () -> Date = Date.init,
         kind: PermissionKind = .screenRecording
@@ -29,6 +31,7 @@ struct HotkeyInvocationHandler {
         self.permissionsGate = permissionsGate
         self.screenCaptureService = screenCaptureService
         self.presentScreenshot = presentScreenshot
+        self.presentError = presentError
         self.logService = logService
         self.now = now
         self.kind = kind
@@ -78,6 +81,7 @@ struct HotkeyInvocationHandler {
                 gateLatencyMs: gateLatencyMs,
                 errorDescription: String(describing: error)
             ))
+            presentError("Screen capture failed: \(error.localizedDescription)")
             Self.log.error("Hotkey invocation failed: \(error.localizedDescription, privacy: .public)")
         }
     }

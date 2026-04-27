@@ -27,6 +27,7 @@
 		CF17A6BDF21FD1B3F8690D13 /* PermissionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED47D03840F40871272ED13C /* PermissionError.swift */; };
 		D4D7892F3C39042079C92DEC /* PermissionsChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D36CFA939327054CE038538 /* PermissionsChecker.swift */; };
 		DF3BAB13D3897B30011FF8B2 /* HUDScreenshotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659ECE5A728C28C51E500F35 /* HUDScreenshotView.swift */; };
+		C6D0EFACE6A32A5B1339F60E /* HUDErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A366B091A2CF78B079314AE1 /* HUDErrorView.swift */; };
 		E22538B7BAFDD6DE67CD39A6 /* PermissionKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3601A9D97DFCC20CB1B190 /* PermissionKind.swift */; };
 		EE4E5F822C40DF6233CBDD2A /* ScreenshotTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C80394C10DB95ACE8B23410 /* ScreenshotTarget.swift */; };
 		F213518191A0D0FBED62E67B /* ScreenCaptureService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198A12FCDFC021700C887DC3 /* ScreenCaptureService.swift */; };
@@ -57,6 +58,7 @@
 		11BA73F54C69186834610D30 /* HotkeyManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManagerTests.swift; sourceTree = "<group>"; };
 		639F88F50828EB01F823718B /* PermissionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionStatus.swift; sourceTree = "<group>"; };
 		659ECE5A728C28C51E500F35 /* HUDScreenshotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDScreenshotView.swift; sourceTree = "<group>"; };
+		A366B091A2CF78B079314AE1 /* HUDErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDErrorView.swift; sourceTree = "<group>"; };
 		69DDCCAE89FD5A160E17AE49 /* TAELMacAgentApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TAELMacAgentApp.swift; sourceTree = "<group>"; };
 		6C80394C10DB95ACE8B23410 /* ScreenshotTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTarget.swift; sourceTree = "<group>"; };
 		6DEC30773055C5F4AE735610 /* CapturedScreenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturedScreenshot.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 		25F2B0347D98A8AADDF902E0 /* HUD */ = {
 			isa = PBXGroup;
 			children = (
+				A366B091A2CF78B079314AE1 /* HUDErrorView.swift */,
 				9363E4D91044162835D20FAA /* HUDPanelController.swift */,
 				659ECE5A728C28C51E500F35 /* HUDScreenshotView.swift */,
 				1469160F2705F009163C15E0 /* HUDView.swift */,
@@ -300,6 +303,7 @@
 				0B0660E9860988CD91DA599E /* AppDelegate.swift in Sources */,
 				0330637AAF26CC3C25DCD10F /* CapturedScreenshot.swift in Sources */,
 				8AC8665020F765D063A96609 /* HUDPanelController.swift in Sources */,
+				C6D0EFACE6A32A5B1339F60E /* HUDErrorView.swift in Sources */,
 				DF3BAB13D3897B30011FF8B2 /* HUDScreenshotView.swift in Sources */,
 				F8A8B61233E0F29CD0725388 /* HUDView.swift in Sources */,
 				F6E2AD25AAD3F1AE6D0CA2A6 /* HotkeyInvocationHandler.swift in Sources */,

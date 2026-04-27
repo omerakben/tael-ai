@@ -64,6 +64,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 permissionsGate: permissionsGate,
                 screenCaptureService: screenCaptureService,
                 presentScreenshot: { shot in hudController.present(screenshot: shot) },
+                presentError: { msg in hudController.present(error: msg) },
                 logService: logService
             )
             await handler.run()

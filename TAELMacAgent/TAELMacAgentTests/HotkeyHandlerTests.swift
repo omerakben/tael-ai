@@ -85,10 +85,12 @@ final class HotkeyHandlerTests: XCTestCase {
         ])
 
         var presented: [CapturedScreenshot] = []
+        var presentedErrors: [String] = []
         let handler = HotkeyInvocationHandler(
             permissionsGate: gate,
             screenCaptureService: capture,
             presentScreenshot: { presented.append($0) },
+            presentError: { presentedErrors.append($0) },
             logService: logService,
             now: { clock.next() }
         )
@@ -98,6 +100,7 @@ final class HotkeyHandlerTests: XCTestCase {
         let targets = await capture.observedTargets()
         XCTAssertEqual(targets, [.week1Default])
         XCTAssertEqual(presented.count, 1)
+        XCTAssertTrue(presentedErrors.isEmpty, "Granted path must not present an error HUD")
 
         let logs = await logService.recent(10)
         XCTAssertEqual(logs.count, 1)
@@ -162,10 +165,12 @@ final class HotkeyHandlerTests: XCTestCase {
         ])
 
         var presented: [CapturedScreenshot] = []
+        var presentedErrors: [String] = []
         let handler = HotkeyInvocationHandler(
             permissionsGate: gate,
             screenCaptureService: capture,
             presentScreenshot: { presented.append($0) },
+            presentError: { presentedErrors.append($0) },
             logService: logService,
             now: { clock.next() }
         )
@@ -173,6 +178,10 @@ final class HotkeyHandlerTests: XCTestCase {
         await handler.run()
 
         XCTAssertTrue(presented.isEmpty)
+        XCTAssertEqual(presentedErrors.count, 1)
+        let msg = try XCTUnwrap(presentedErrors.first)
+        XCTAssertTrue(msg.contains("Screen capture failed"),
+            "Error HUD message should lead with the user-facing prefix")
         let logs = await logService.recent(10)
         XCTAssertEqual(logs.count, 1)
         let row = try XCTUnwrap(logs.first)
