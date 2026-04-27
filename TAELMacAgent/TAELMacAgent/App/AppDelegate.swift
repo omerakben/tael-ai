@@ -5,9 +5,12 @@
 
 import AppKit
 import Foundation
+import os.log
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    private static let log = Logger(subsystem: "ai.tael.macagent", category: "AppDelegate")
+
     private var menuBarController: MenuBarController?
     private var hotkeyManager: HotkeyManager?
     private var hudController: HUDPanelController?
@@ -53,16 +56,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                   let permissionsGate = self.permissionsGate,
                   let screenCaptureService = self.screenCaptureService,
                   let hudController = self.hudController,
-                  let logService = self.logService else { return }
+                  let logService = self.logService else {
+                AppDelegate.log.error("Hotkey fired but app state unavailable; ignoring")
+                return
+            }
             let handler = HotkeyInvocationHandler(
                 permissionsGate: permissionsGate,
                 screenCaptureService: screenCaptureService,
                 presentScreenshot: { shot in hudController.present(screenshot: shot) },
+                presentError: { msg in hudController.present(error: msg) },
                 logService: logService
             )
-            Task { @MainActor in
-                await handler.run()
-            }
+            await handler.run()
         }
         hotkeyManager.installBinding()
     }

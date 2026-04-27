@@ -31,6 +31,10 @@ final class HUDPanelController: NSObject, PermissionGatePresenting {
         presentNew(content: HUDScreenshotView(screenshot: screenshot))
     }
 
+    func present(error message: String) {
+        presentNew(content: HUDErrorView(message: message))
+    }
+
     /// `PermissionGatePresenting` implementation: show a sheet-like HUD that
     /// explains the missing permission and links to System Settings.
     /// `nonisolated` so it satisfies the non-isolated protocol

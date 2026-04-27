@@ -52,21 +52,47 @@ final class HotkeyHandlerTests: XCTestCase {
         return CapturedScreenshot(image: image, target: .displayContainingCursor)
     }
 
+    /// Pops dates from a fixed sequence each time it's read. The handler
+    /// reads `now()` exactly three times on the granted path (started, then once
+    /// inside the closure for gateEnd which also serves as captureStart,
+    /// then once for captureEnd). Built as a class so the closure-captured
+    /// state survives across reads.
+    private final class StubClock: @unchecked Sendable {
+        private var ticks: [Date]
+        init(_ ticks: [Date]) { self.ticks = ticks }
+        func next() -> Date {
+            precondition(!ticks.isEmpty, "StubClock ran out of ticks")
+            return ticks.removeFirst()
+        }
+    }
+
     // MARK: - Granted path
 
-    func test_run_whenGranted_callsCaptureAndPresentsAndLogsGranted() async {
+    func test_run_whenGranted_callsCaptureAndPresentsAndLogsGranted() async throws {
         let checker = StubChecker(.granted)
         let ui = SpyUI()
         let gate = PermissionsGate(checker: checker, permissionUI: ui)
         let capture = SpyCapture(stub: makeStubScreenshot())
         let logService = LocalLogService(capacity: 16)
 
+        // Pin exact latencies: started=0, gateEnd=0.1 (100ms gate),
+        // captureEnd=0.3 (200ms capture). The handler reads now() three
+        // times on the granted path: started, gateEnd, captureEnd.
+        let clock = StubClock([
+            Date(timeIntervalSince1970: 0),
+            Date(timeIntervalSince1970: 0.1),
+            Date(timeIntervalSince1970: 0.3),
+        ])
+
         var presented: [CapturedScreenshot] = []
+        var presentedErrors: [String] = []
         let handler = HotkeyInvocationHandler(
             permissionsGate: gate,
             screenCaptureService: capture,
             presentScreenshot: { presented.append($0) },
-            logService: logService
+            presentError: { presentedErrors.append($0) },
+            logService: logService,
+            now: { clock.next() }
         )
 
         await handler.run()
@@ -74,12 +100,16 @@ final class HotkeyHandlerTests: XCTestCase {
         let targets = await capture.observedTargets()
         XCTAssertEqual(targets, [.week1Default])
         XCTAssertEqual(presented.count, 1)
+        XCTAssertTrue(presentedErrors.isEmpty, "Granted path must not present an error HUD")
 
         let logs = await logService.recent(10)
         XCTAssertEqual(logs.count, 1)
-        XCTAssertEqual(logs.first?.gateOutcome, .granted)
-        XCTAssertNotNil(logs.first?.gateLatencyMs)
-        XCTAssertNotNil(logs.first?.captureLatencyMs)
+        let row = try XCTUnwrap(logs.first)
+        XCTAssertEqual(row.gateOutcome, .granted)
+        XCTAssertEqual(row.gateLatencyMs ?? -1, 100, accuracy: 0.001,
+            "gate took 100ms (0 → 0.1 second), value must be ms not seconds")
+        XCTAssertEqual(row.captureLatencyMs ?? -1, 200, accuracy: 0.001,
+            "capture took 200ms (0.1 → 0.3 second)")
     }
 
     // MARK: - Denied path
@@ -118,7 +148,7 @@ final class HotkeyHandlerTests: XCTestCase {
 
     // MARK: - Capture failure path
 
-    func test_run_whenCaptureFails_logsErroredOutcome() async {
+    func test_run_whenCaptureFails_logsErroredOutcome() async throws {
         let checker = StubChecker(.granted)
         let ui = SpyUI()
         let gate = PermissionsGate(checker: checker, permissionUI: ui)
@@ -127,21 +157,76 @@ final class HotkeyHandlerTests: XCTestCase {
 
         let logService = LocalLogService(capacity: 16)
 
+        // started=0, gateEnd=0.05 (50ms). Capture fails immediately after
+        // the gate grants, so only two ticks are needed.
+        let clock = StubClock([
+            Date(timeIntervalSince1970: 0),
+            Date(timeIntervalSince1970: 0.05),
+        ])
+
         var presented: [CapturedScreenshot] = []
+        var presentedErrors: [String] = []
         let handler = HotkeyInvocationHandler(
             permissionsGate: gate,
             screenCaptureService: capture,
             presentScreenshot: { presented.append($0) },
-            logService: logService
+            presentError: { presentedErrors.append($0) },
+            logService: logService,
+            now: { clock.next() }
         )
 
         await handler.run()
 
         XCTAssertTrue(presented.isEmpty)
+        XCTAssertEqual(presentedErrors.count, 1)
+        let msg = try XCTUnwrap(presentedErrors.first)
+        XCTAssertTrue(msg.contains("Screen capture failed"),
+            "Error HUD message should lead with the user-facing prefix")
         let logs = await logService.recent(10)
         XCTAssertEqual(logs.count, 1)
-        XCTAssertEqual(logs.first?.gateOutcome, .errored)
-        XCTAssertNotNil(logs.first?.gateLatencyMs)
-        XCTAssertEqual(logs.first?.errorDescription, "captureFailed(\"simulated\")")
+        let row = try XCTUnwrap(logs.first)
+        XCTAssertEqual(row.gateOutcome, .errored)
+        XCTAssertEqual(row.errorDescription, "captureFailed(\"simulated\")")
+        XCTAssertEqual(row.gateLatencyMs ?? -1, 50, accuracy: 0.001,
+            "gate granted in 50ms before capture threw; latency must be retained")
+    }
+
+    // MARK: - Not-implemented kind
+
+    func test_run_whenKindNotImplemented_doesNotCapture_logsRestricted() async {
+        // Use a kind whose isImplemented returns false today (Week 1
+        // implements only .screenRecording). The gate throws .notImplemented
+        // before any capture work runs.
+        let checker = StubChecker(.granted)
+        let ui = SpyUI()
+        let gate = PermissionsGate(checker: checker, permissionUI: ui)
+        let capture = SpyCapture(stub: makeStubScreenshot())
+        let logService = LocalLogService(capacity: 16)
+
+        var presented: [CapturedScreenshot] = []
+        let handler = HotkeyInvocationHandler(
+            permissionsGate: gate,
+            screenCaptureService: capture,
+            presentScreenshot: { presented.append($0) },
+            logService: logService,
+            kind: .accessibility
+        )
+
+        await handler.run()
+
+        let observed = await capture.observedTargets()
+        XCTAssertTrue(observed.isEmpty, "Capture must not run when kind is unimplemented")
+        XCTAssertTrue(presented.isEmpty)
+
+        let logs = await logService.recent(10)
+        XCTAssertEqual(logs.count, 1)
+        XCTAssertEqual(logs.first?.gateOutcome, .restricted)
+        XCTAssertNil(logs.first?.gateLatencyMs, "gate didn't grant; latency must stay nil")
+        XCTAssertNotNil(logs.first?.errorDescription)
+
+        // The gate does NOT show UI for .notImplemented (per the existing
+        // PermissionsGateTests contract: not-implemented is silent).
+        let shown = await ui.shownKinds
+        XCTAssertTrue(shown.isEmpty)
     }
 }
