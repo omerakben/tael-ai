@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0330637AAF26CC3C25DCD10F /* CapturedScreenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DEC30773055C5F4AE735610 /* CapturedScreenshot.swift */; };
+		7964D277474D82B3302C0282 /* FocusedWindowMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C62287F71E34A3241BAE41 /* FocusedWindowMetadata.swift */; };
 		033A279961698D88188A33AD /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD624AFDCE20EF4B613B9A4 /* MenuBarController.swift */; };
 		06ADDF6182CAEDB9CC8191F9 /* HotkeyHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600507D8811CFB057BB49AA4 /* HotkeyHandlerTests.swift */; };
 		354AC58980118264F0FF7B67 /* HotkeyManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BA73F54C69186834610D30 /* HotkeyManagerTests.swift */; };
@@ -64,6 +65,7 @@
 		69DDCCAE89FD5A160E17AE49 /* TAELMacAgentApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TAELMacAgentApp.swift; sourceTree = "<group>"; };
 		6C80394C10DB95ACE8B23410 /* ScreenshotTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTarget.swift; sourceTree = "<group>"; };
 		6DEC30773055C5F4AE735610 /* CapturedScreenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturedScreenshot.swift; sourceTree = "<group>"; };
+		D2C62287F71E34A3241BAE41 /* FocusedWindowMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusedWindowMetadata.swift; sourceTree = "<group>"; };
 		6E3601A9D97DFCC20CB1B190 /* PermissionKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionKind.swift; sourceTree = "<group>"; };
 		6F5C315999DFCC84BE675BE2 /* LocalLogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLogService.swift; sourceTree = "<group>"; };
 		917682B8FDBFE7C755263E19 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				6DEC30773055C5F4AE735610 /* CapturedScreenshot.swift */,
+				D2C62287F71E34A3241BAE41 /* FocusedWindowMetadata.swift */,
 				198A12FCDFC021700C887DC3 /* ScreenCaptureService.swift */,
 				6C80394C10DB95ACE8B23410 /* ScreenshotTarget.swift */,
 			);
@@ -305,6 +308,7 @@
 			files = (
 				0B0660E9860988CD91DA599E /* AppDelegate.swift in Sources */,
 				0330637AAF26CC3C25DCD10F /* CapturedScreenshot.swift in Sources */,
+				7964D277474D82B3302C0282 /* FocusedWindowMetadata.swift in Sources */,
 				8AC8665020F765D063A96609 /* HUDPanelController.swift in Sources */,
 				C6D0EFACE6A32A5B1339F60E /* HUDErrorView.swift in Sources */,
 				DF3BAB13D3897B30011FF8B2 /* HUDScreenshotView.swift in Sources */,
