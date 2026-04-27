@@ -60,15 +60,22 @@ is "Open System Settings" only.
 This wraps `tccutil reset ScreenCapture ai.tael.macagent`. See the
 script for what it does and how to dry-run it.
 
-## Future permissions (placeholders only in PR 1)
+## Active permissions
 
-### Accessibility
+### Accessibility (PR 4)
 
-- Required for AX tree reads and for `CGEvent` synthesis on Apple
-  Silicon under modern macOS.
-- Use `AXIsProcessTrustedWithOptions` to check; pass
-  `kAXTrustedCheckOptionPrompt` to prompt.
-- Quit-and-relaunch behavior: similar to Screen Recording.
+- Required for AX tree reads (PR 5+) and for `CGEvent` synthesis on
+  Apple Silicon under modern macOS.
+- `PermissionsChecker.accessibilityStatus()` calls `AXIsProcessTrusted()`
+  — the no-prompt variant. The prompting variant
+  (`AXIsProcessTrustedWithOptions([kAXTrustedCheckOptionPrompt: true])`)
+  is intentionally not used; `PermissionGateView` owns the prompt path
+  so the user lands in the same flow as Screen Recording.
+- Quit-and-relaunch behavior: similar to Screen Recording. After
+  granting AX in System Settings → Privacy & Security → Accessibility,
+  the app must be relaunched for the trust state to flip.
+
+## Future permissions (placeholders only)
 
 ### Microphone
 
