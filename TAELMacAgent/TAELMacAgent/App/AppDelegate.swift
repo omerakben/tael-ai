@@ -16,6 +16,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var hudController: HUDPanelController?
     private var permissionsGate: PermissionsGate?
     private var screenCaptureService: DisplayScreenshotCapturing?
+    private var focusedWindowReader: FocusedWindowReading?
     private var logService: LocalLogService?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -30,6 +31,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             permissionUI: hudController
         )
         let screenCaptureService = ScreenCaptureService()
+        let focusedWindowReader = AXService()
         let hotkeyManager = HotkeyManager()
         let menuBarController = MenuBarController(
             onShowHUD: { [weak hudController] in
@@ -44,6 +46,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         self.hudController = hudController
         self.permissionsGate = permissionsGate
         self.screenCaptureService = screenCaptureService
+        self.focusedWindowReader = focusedWindowReader
         self.hotkeyManager = hotkeyManager
         self.menuBarController = menuBarController
 
@@ -55,6 +58,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             guard let self,
                   let permissionsGate = self.permissionsGate,
                   let screenCaptureService = self.screenCaptureService,
+                  let focusedWindowReader = self.focusedWindowReader,
                   let hudController = self.hudController,
                   let logService = self.logService else {
                 AppDelegate.log.error("Hotkey fired but app state unavailable; ignoring")
@@ -63,7 +67,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             let handler = HotkeyInvocationHandler(
                 permissionsGate: permissionsGate,
                 screenCaptureService: screenCaptureService,
+                focusedWindowReader: focusedWindowReader,
                 presentScreenshot: { shot in hudController.present(screenshot: shot) },
+                presentContext: { bundle in hudController.present(context: bundle) },
                 presentError: { msg in hudController.present(error: msg) },
                 logService: logService
             )

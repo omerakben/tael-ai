@@ -8,17 +8,20 @@ This is an **architectural rule**, not a guideline.
 
 ## What is a "protected API call"?
 
-| Surface | Examples | TCC permission | Status in PR 1 |
+| Surface | Examples | TCC permission | Current status |
 |---|---|---|---|
-| Screen capture | `SCScreenshotManager`, `CGDisplayStream`, `CGWindowListCreateImage` | Screen Recording | **Active** — gated through `PermissionsGate` with `.screenRecording`. |
-| Accessibility tree | `AXUIElement*`, `AXObserver*` | Accessibility | **Active (PR 4)** — gated through `PermissionsGate` with `.accessibility`. PR 4 lands the permission check (`AXIsProcessTrusted`); the actual AX tree read lands in PR 5. |
+| Screen capture | `SCScreenshotManager`, `CGDisplayStream`, `CGWindowListCreateImage` | Screen Recording | **Active**. Gated through `PermissionsGate` with `.screenRecording`. |
+| Focused-window metadata | `AXUIElement*`, `AXObserver*` | Accessibility | **Active**. `AXService` consumes a `.accessibility` grant for frontmost app and focused-window metadata. |
 | Microphone | `AVAudioEngine`, `AVCaptureDevice` (audio) | Microphone | Future. Enum placeholder only. |
 | Apple Events / scripting | `NSAppleScript`, `OSAScript`, `appleScriptObjectSpecifier` | Apple Events / Automation | Future. Enum placeholder only. |
 | Keyboard/mouse synthesis | `CGEvent.post`, `CGEventTapCreate` | Input Monitoring / Accessibility | Future. Enum placeholder only. |
-| Subprocess execution | `Process()`, `posix_spawn`, `system()` | n/a (but treated as protected by `SafetyPolicy`) | Future. Not in PR 1. Will go through `SafeExecutor`. |
-| Clipboard write | `NSPasteboard.general.set*` | n/a (but treated as protected by `SafetyPolicy`) | Future. Not in PR 1. Will go through `ClipboardExecutor`. |
+| Subprocess execution | `Process()`, `posix_spawn`, `system()` | n/a (but treated as protected by `SafetyPolicy`) | Future. Will go through `SafeExecutor`. |
+| Clipboard write | `NSPasteboard.general.set*` | n/a (but treated as protected by `SafetyPolicy`) | Future. Will go through `ClipboardExecutor`. |
 
-For PR 4, Screen Recording and Accessibility are active. Microphone, Apple Events, and Input Monitoring remain future policy entries — their enum cases exist (so the gate has a complete vocabulary) but `PermissionsChecker` does not query them, and no service consumes their grants yet.
+Screen Recording and Accessibility are active. Microphone, Apple Events, and
+Input Monitoring remain future policy entries. Their enum cases exist so the
+gate has a complete vocabulary, but `PermissionsChecker` does not query them
+and no service consumes their grants yet.
 
 ## How the gate works
 
@@ -34,12 +37,15 @@ struct PermissionGrant {
 final class PermissionsGate {
     func withPermission<T>(
         _ kind: PermissionKind,
+        showMissingUI: Bool = true,
         operation: (PermissionGrant) async throws -> T
     ) async throws -> T {
         let status = await checker.status(for: kind)
 
         guard status == .granted else {
-            await permissionUI.showGate(for: kind)
+            if showMissingUI {
+                await permissionUI.showGate(for: kind)
+            }
             throw PermissionError.missing(kind)
         }
 
@@ -58,9 +64,10 @@ Two properties:
    without going through the gate, because the closure body
    `PermissionsGate.withPermission` runs is the only place a grant
    exists.
-2. **Single source of permission UI.** Missing permission always shows
-   the same `PermissionGateView`. There is no per-feature ad-hoc
-   "did you grant…" sheet.
+2. **Single source of permission UI.** Required missing permissions show
+   the same `PermissionGateView`. Optional context reads may pass
+   `showMissingUI: false` but still receive a grant only through the gate.
+   There is no per-feature ad-hoc "did you grant..." sheet.
 
 ## Required usage pattern
 

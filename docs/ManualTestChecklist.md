@@ -3,9 +3,9 @@
 PR-by-PR, run the rows that apply. Anything new and risky should add a
 row here.
 
-Legend: ✅ pass · ⚠️ pass with note · ❌ fail · — not applicable to this PR
+Legend: pass, pass with note, fail, not applicable
 
-## PR 1 — scaffold only
+## PR 1 scaffold only
 
 | # | Check | Expected | Result |
 |---|---|---|---|
@@ -19,10 +19,9 @@ Legend: ✅ pass · ⚠️ pass with note · ❌ fail · — not applicable to t
 | 8 | Inspect `Info.plist` | `LSUIElement = YES`, `LSMinimumSystemVersion = 14.0`, `CFBundleIdentifier = ai.tael.macagent` | |
 | 9 | Confirm no Screen Recording prompt appears on launch | We do not call any protected API on launch | |
 
-## Week 1 (lands in PR 2 — `hotkey → screenshot → HUD`)
+## Week 1 heartbeat, shipped in PR 2
 
-These are not expected to pass on PR 1. Listed here so they are ready
-when PR 2 lands.
+These are retained as the baseline heartbeat checks.
 
 | # | Check | Expected |
 |---|---|---|
@@ -39,7 +38,7 @@ when PR 2 lands.
 | W1.11 | Press hotkey with cursor on a Cursor / VS Code window | Screenshot includes that window |
 | W1.12 | Inspect `LocalLogService` after several invocations | Each invocation has a row with hotkey ts, gate result, capture timing, target display metadata |
 
-## PR 2 — Week 1 heartbeat manual cases
+## PR 2 Week 1 heartbeat manual cases
 
 ### PR-2.1 First-launch Screen Recording prompt
 
@@ -58,16 +57,16 @@ when PR 2 lands.
 
 - Click "Open System Settings" in the gate, grant Screen Recording for TAELMacAgent, quit/relaunch TAEL.
 - Press ⌘⇧T.
-- Expected: HUD appears within ~500ms showing the cursor display's screenshot at max 720x480 with caption "Captured WIDTHxHEIGHT — cursor display".
+- Expected: HUD appears within ~500ms showing the cursor display's screenshot at max 720x480 with caption "Captured WIDTHxHEIGHT - cursor display".
 - Expected: HUD does not steal focus from Terminal/VS Code/Cursor.
 
-### PR-2.4 Multi-monitor — cursor display selection
+### PR-2.4 Multi-monitor cursor display selection
 
 - With two displays, move the cursor to the secondary display.
 - Press ⌘⇧T.
 - Expected: HUD shows the secondary display's content, caption says "cursor display".
 
-### PR-2.5 Multi-monitor — main display fallback
+### PR-2.5 Multi-monitor main display fallback
 
 - Disconnect or disable the secondary display while the cursor was on it (edge case; requires a hotplug or display-arrangement change).
 - Press ⌘⇧T.
@@ -90,6 +89,29 @@ when PR 2 lands.
 - Expected: each row has hotkeyTimestamp, gateOutcome, gateLatencyMs, captureLatencyMs, targetDescription. Granted-path rows have all four numeric fields populated.
 
 ## TCC reset for clean re-test
+
+## PR 5 focused-window metadata
+
+| # | Check | Expected |
+|---|---|---|
+| PR-5.1 | Grant Screen Recording, do not grant Accessibility, press `Command-Shift-T` from Terminal | Screenshot HUD appears; focused-window area says metadata is unavailable; no Accessibility gate interrupts the heartbeat |
+| PR-5.2 | Grant Screen Recording and Accessibility, press `Command-Shift-T` from Terminal | HUD shows screenshot plus Terminal app name and focused-window title when available |
+| PR-5.3 | Press `Command-Shift-T` from VS Code or Cursor | HUD shows screenshot plus app name and a best-effort focused-window title |
+| PR-5.4 | Press `Command-Shift-T` from Safari or another sandboxed app | HUD still appears; metadata may be partial but app must not crash |
+| PR-5.5 | Press `Command-Shift-T` from a full-screen app | HUD appears without stealing focus; metadata degrades gracefully |
+| PR-5.6 | Revoke Accessibility while app is running, then press `Command-Shift-T` | Screenshot still appears; focused-window metadata is omitted |
+| PR-5.7 | Inspect project root and `~/Library/Application Support/TAELMacAgent/` | No screenshot or AX context files are created |
+
+## Alpha DMG smoke test
+
+| # | Check | Expected |
+|---|---|---|
+| A.1 | Run `./scripts/package-alpha-dmg.sh` without required env vars | Script exits with a clear prerequisite error |
+| A.2 | Package with Developer ID identity and notary profile | DMG is created, notarized, stapled, and Gatekeeper-checked |
+| A.3 | Install from the DMG on a clean user or fresh Mac | App launches as a menubar utility |
+| A.4 | Grant Screen Recording and invoke the hotkey | Screenshot HUD appears |
+| A.5 | Grant Accessibility and invoke the hotkey | Focused-window metadata appears when available |
+| A.6 | Quit from menubar | App exits cleanly |
 
 ```bash
 ./scripts/reset-tcc-dev.sh

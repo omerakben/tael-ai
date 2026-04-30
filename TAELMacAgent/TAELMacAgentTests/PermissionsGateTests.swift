@@ -11,7 +11,7 @@
 //       `.granted`, and the closure receives a `PermissionGrant`
 //       whose `kind` matches the requested kind.
 //    3. The grant's `kind` cannot be forged from outside
-//       `PermissionsGate.swift` — `PermissionGrant` is declared in
+//       `PermissionsGate.swift`; `PermissionGrant` is declared in
 //       that same file with a `fileprivate init`, so even
 //       `@testable import` cannot reach the initializer from this
 //       test file. Verified at compile time: this test file does not
@@ -168,6 +168,6 @@ final class PermissionsGateTests: XCTestCase {
 
         XCTAssertFalse(operationRan, "Operation must not run for unimplemented kinds.")
         let shown = await ui.shownKinds
-        XCTAssertTrue(shown.isEmpty, "Gate UI must not appear for unimplemented kinds — there is nothing the user can grant.")
+        XCTAssertTrue(shown.isEmpty, "Gate UI must not appear for unimplemented kinds; there is nothing the user can grant.")
     }
 }

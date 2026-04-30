@@ -17,7 +17,7 @@ If you hit a TCC weirdness, write it down here.
   requirement, and ad-hoc identities flap, which causes the OS to
   re-prompt or silently drop grants.
 
-## Week 1 active permission: Screen Recording
+## Active permission: Screen Recording
 
 ### Behavior
 
@@ -37,19 +37,16 @@ If you hit a TCC weirdness, write it down here.
 We use `CGPreflightScreenCaptureAccess()` to read the current
 state without triggering the prompt.
 
-PR 1's `PermissionGateView` does **not** call
-`CGRequestScreenCaptureAccess()`; it only links the user to System
-Settings → Privacy & Security → Screen Recording. The first system
-prompt for Screen Recording is therefore triggered as a side effect of
-the first real ScreenCaptureKit call (which lands in PR 2). If we add
-an explicit "Request access" button in the gate later, it will route
-through `CGRequestScreenCaptureAccess()` — but until then, the gate
-is "Open System Settings" only.
+`PermissionGateView` does **not** call `CGRequestScreenCaptureAccess()`;
+it links the user to System Settings → Privacy & Security → Screen
+Recording. If we add an explicit "Request access" button later, it will
+route through `CGRequestScreenCaptureAccess()`. Until then, the gate is
+"Open System Settings" only.
 
 > Note: in some macOS 14 minor versions, `CGPreflightScreenCaptureAccess`
 > can return `true` even when ScreenCaptureKit later fails. The gate
 > should consider both preflight and an actual `SCShareableContent` probe.
-> This is an open item — see ticket 4 in `Week1Heartbeat.md`.
+> This remains a known macOS edge case to watch during manual QA.
 
 ### Reset for development
 
@@ -62,18 +59,21 @@ script for what it does and how to dry-run it.
 
 ## Active permissions
 
-### Accessibility (PR 4)
+### Accessibility
 
-- Required for AX tree reads (PR 5+) and for `CGEvent` synthesis on
-  Apple Silicon under modern macOS.
+- Required for focused-window metadata and for future AX tree reads.
+- `AXService` consumes a `.accessibility` grant to read frontmost app,
+  focused-window title, and focused-window role.
 - `PermissionsChecker.accessibilityStatus()` calls `AXIsProcessTrusted()`
-  — the no-prompt variant. The prompting variant
+  - the no-prompt variant. The prompting variant
   (`AXIsProcessTrustedWithOptions([kAXTrustedCheckOptionPrompt: true])`)
   is intentionally not used; `PermissionGateView` owns the prompt path
   so the user lands in the same flow as Screen Recording.
 - Quit-and-relaunch behavior: similar to Screen Recording. After
   granting AX in System Settings → Privacy & Security → Accessibility,
   the app must be relaunched for the trust state to flip.
+- During a normal hotkey invocation, Accessibility is optional context:
+  missing AX permission must not interrupt the screenshot heartbeat.
 
 ## Future permissions (placeholders only)
 
@@ -86,19 +86,18 @@ script for what it does and how to dry-run it.
 
 - Per-target. Sending an event to e.g. Terminal prompts a per-app
   grant. There is no global "Apple Events on" toggle.
-- We will not request these in PR 1.
+- We will not request these before the planner/executor milestone.
 
 ### Input Monitoring
 
 - Required if we ever use a low-level `CGEventTap` for global hotkey
-  capture. We avoid this in PR 1 by using KeyboardShortcuts (which
-  uses Carbon HotKey APIs and does not require Input Monitoring).
+  capture. We avoid this by using KeyboardShortcuts, which uses Carbon
+  HotKey APIs and does not require Input Monitoring.
 
 ## Logs
 
-`LocalLogService` keeps an in-memory ring buffer of `InvocationLog`
-rows in PR 1. To inspect after a session, use the menubar "Show recent
-invocations" item (planned for PR 2). For now, attach a debugger.
+`LocalLogService` keeps an in-memory ring buffer of `InvocationLog` rows.
+To inspect after a session, attach a debugger and call `recent()`.
 
 ## Things we have not yet observed but expect
 
