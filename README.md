@@ -10,30 +10,30 @@ freeze in [`TAEL_AI_mac_agent_build_plan_v0_3.md`](TAEL_AI_mac_agent_build_plan_
 
 ## Status
 
-PR 1 scope: native macOS menubar scaffold + Week 1 policy/docs.
-
-What works today:
+Current internal alpha track:
 
 - App launches as a native macOS menubar utility.
 - Stable bundle ID `ai.tael.macagent`, deployment target macOS 14.0+.
-- Quit cleanly from menubar.
-- Permissions boundary types (`PermissionKind`, `PermissionStatus`,
-  `PermissionError`, `PermissionGrant`) are in place.
+- Global hotkey `Command-Shift-T` runs the heartbeat.
 - `PermissionsGate` enforces a tokenized closure boundary for protected APIs.
-- `PermissionsChecker` v0 reports Screen Recording status only.
-- `HUDPanelController` placeholder (non-activating `NSPanel`).
-- `ScreenCaptureService` exists as a typed stub that requires a
-  `PermissionGrant`; the real `SCScreenshotManager` call lands in PR 2.
+- Screen Recording and Accessibility permission checks are active.
+- `ScreenCaptureService` captures the display containing the cursor with
+  `SCScreenshotManager.captureImage(contentFilter:configuration:)`.
+- HUD renders the captured screenshot and, when Accessibility is granted,
+  focused-window metadata.
+- `LocalLogService` keeps an in-memory invocation log only.
+- Internal alpha DMG packaging is scripted in `scripts/package-alpha-dmg.sh`,
+  but Developer ID certificate and notary credentials are local prerequisites.
 
-What is intentionally NOT in PR 1:
+Still intentionally deferred:
 
 - AI planner, speech capture, WhisperKit
-- AX tree, focused-window metadata
-- YAML skills, executor, clipboard / shell / AppleScript / CGEvent actions
+- AX tree dump beyond focused-window metadata
+- YAML skills, executor, clipboard, shell, AppleScript, CGEvent actions
 - Settings UI, polished onboarding
-- DMG packaging, Sparkle, analytics, token tracking
-- Screenshot persistence
-- Product naming / landing page
+- Sparkle updates, analytics, token tracking
+- Screenshot or AX context persistence
+- Public launch operations
 
 See [`docs/Week1Heartbeat.md`](docs/Week1Heartbeat.md) for the Week 1
 heartbeat and the Week 1 implementation ticket order.
@@ -80,21 +80,37 @@ tael-ai/
 ## Building
 
 ```bash
-open TAELMacAgent/TAELMacAgent.xcodeproj
+make xcodeproj
+make build
+make test
 ```
 
-In Xcode, select the `TAELMacAgent` scheme and press Run.
+For Xcode, open `TAELMacAgent/TAELMacAgent.xcodeproj`, select the
+`TAELMacAgent` scheme, and press Run.
 
 > Ad-hoc signing is **not** the intended dev path. TCC permissions are keyed
 > to bundle identity and signing requirements; unstable signing makes
 > permission debugging noisy. The real Team ID must be set before any
-> Screen Recording / TCC work — see TODO.
+> Screen Recording / TCC work. See TODO.
+
+## Alpha packaging
+
+Internal alpha packaging is manual DMG only:
+
+```bash
+DEVELOPER_ID_APPLICATION="Developer ID Application: OMER FARUK AKBEN (...)" \
+NOTARYTOOL_PROFILE="tael-notary" \
+VERSION="0.1.0-alpha.1" \
+./scripts/package-alpha-dmg.sh
+```
+
+See [`docs/AlphaReleaseChecklist.md`](docs/AlphaReleaseChecklist.md).
 
 ## Branches
 
-- `main` — frozen plan + scaffold
-- `dev-claude` — Maestro Claude development branch (this branch)
-- `dev-codex` — Codex development branch
+- `main` is the production/release branch.
+- `develop` is the integration branch.
+- `feature/*` and `codex/*` branches PR into `develop`.
 
 ## License
 

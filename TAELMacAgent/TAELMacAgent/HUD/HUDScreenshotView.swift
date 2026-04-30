@@ -13,7 +13,7 @@ struct HUDScreenshotView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Captured \(screenshot.width)×\(screenshot.height) — \(targetLabel)")
+            Text("Captured \(screenshot.width)x\(screenshot.height) - \(targetLabel)")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 

@@ -79,6 +79,7 @@ public final class PermissionsGate: Sendable {
     @discardableResult
     public func withPermission<T>(
         _ kind: PermissionKind,
+        showMissingUI: Bool = true,
         operation: (PermissionGrant) async throws -> T
     ) async throws -> T {
         // Unimplemented kinds short-circuit before the checker. Showing
@@ -92,7 +93,9 @@ public final class PermissionsGate: Sendable {
         let status = await checker.status(for: kind)
 
         guard status == .granted else {
-            await permissionUI.showGate(for: kind)
+            if showMissingUI {
+                await permissionUI.showGate(for: kind)
+            }
             throw PermissionError.missing(kind)
         }
 

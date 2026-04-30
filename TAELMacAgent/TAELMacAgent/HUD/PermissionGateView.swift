@@ -51,7 +51,7 @@ struct PermissionGateView: View {
         case .screenRecording:
             return "Used to capture the display containing the cursor when you invoke TAEL. Screenshots are not saved to disk."
         case .accessibility:
-            return "Used to read the focused window's UI tree (title, role, content text) so TAEL can scope context to what you're looking at. Read-only — TAEL does not synthesize keyboard or mouse events."
+            return "Used to read the focused window's UI tree (title, role, content text) so TAEL can scope context to what you're looking at. Read-only: TAEL does not synthesize keyboard or mouse events."
         case .microphone:
             return "Used to capture your voice for the active invocation. Not yet implemented."
         case .appleEvents:

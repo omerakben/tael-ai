@@ -11,7 +11,7 @@
 //       `.granted`, and the closure receives a `PermissionGrant`
 //       whose `kind` matches the requested kind.
 //    3. The grant's `kind` cannot be forged from outside
-//       `PermissionsGate.swift` — `PermissionGrant` is declared in
+//       `PermissionsGate.swift`; `PermissionGrant` is declared in
 //       that same file with a `fileprivate init`, so even
 //       `@testable import` cannot reach the initializer from this
 //       test file. Verified at compile time: this test file does not
@@ -99,6 +99,30 @@ final class PermissionsGateTests: XCTestCase {
         XCTAssertEqual(shown, [.screenRecording])
     }
 
+    func test_withPermission_whenMissingAndShowMissingUIFalse_throwsWithoutShowingGate() async {
+        let checker = StubChecker([.accessibility: .denied])
+        let ui = SpyUI()
+        let gate = PermissionsGate(checker: checker, permissionUI: ui)
+
+        var operationRan = false
+
+        do {
+            _ = try await gate.withPermission(.accessibility, showMissingUI: false) { _ in
+                operationRan = true
+                return ()
+            }
+            XCTFail("Expected PermissionError.missing to be thrown.")
+        } catch let error as PermissionError {
+            XCTAssertEqual(error, .missing(.accessibility))
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+
+        XCTAssertFalse(operationRan)
+        let shown = await ui.shownKinds
+        XCTAssertTrue(shown.isEmpty, "Gate UI must not appear when showMissingUI is false.")
+    }
+
     // MARK: - Granted path
 
     func test_withPermission_whenGranted_runsOperationOnceWithMatchingGrantKind() async throws {
@@ -168,6 +192,6 @@ final class PermissionsGateTests: XCTestCase {
 
         XCTAssertFalse(operationRan, "Operation must not run for unimplemented kinds.")
         let shown = await ui.shownKinds
-        XCTAssertTrue(shown.isEmpty, "Gate UI must not appear for unimplemented kinds — there is nothing the user can grant.")
+        XCTAssertTrue(shown.isEmpty, "Gate UI must not appear for unimplemented kinds; there is nothing the user can grant.")
     }
 }
