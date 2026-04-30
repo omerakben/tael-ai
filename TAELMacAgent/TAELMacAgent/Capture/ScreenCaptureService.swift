@@ -51,37 +51,68 @@ public extension DisplayScreenshotCapturing {
     }
 }
 
-/// Resolves the target display per v0.3 §23.2: cursor display first,
-/// fallback to main display, fallback to the first available display.
-/// Returns the resolved `(SCDisplay, ScreenshotTarget)` so the caller
-/// knows whether it got the cursor display or fell back.
+/// Pure resolution rule per v0.3 §23.2: cursor display first, fallback
+/// to main display, fallback to the first available display. Generic
+/// over the candidate type so unit tests can pass plain structs without
+/// instantiating `SCShareableContent` or reading `NSEvent.mouseLocation`.
+///
+/// Resolution order:
+///   1. requested == .displayContainingCursor and cursor display is in
+///      candidates → `(cursorDisplay, .displayContainingCursor)`
+///   2. main display ID is in candidates → `(mainDisplay, .mainDisplay)`
+///   3. any candidate exists → `(first, .mainDisplay)` (best-effort fallback)
+///   4. no candidates → `nil`
+struct DisplayResolution<D> {
+    let display: D
+    let resolved: ScreenshotTarget
+}
+
+func resolveDisplay<D>(
+    candidates: [D],
+    displayID: (D) -> CGDirectDisplayID,
+    cursorDisplayID: CGDirectDisplayID?,
+    mainDisplayID: CGDirectDisplayID,
+    requested: ScreenshotTarget
+) -> DisplayResolution<D>? {
+    guard !candidates.isEmpty else { return nil }
+
+    if requested == .displayContainingCursor,
+       let cursorID = cursorDisplayID,
+       let display = candidates.first(where: { displayID($0) == cursorID })
+    {
+        return DisplayResolution(display: display, resolved: .displayContainingCursor)
+    }
+
+    if let main = candidates.first(where: { displayID($0) == mainDisplayID }) {
+        return DisplayResolution(display: main, resolved: .mainDisplay)
+    }
+    if let first = candidates.first {
+        return DisplayResolution(display: first, resolved: .mainDisplay)
+    }
+    return nil
+}
+
+/// Adapter: reads cursor location from `NSEvent` and delegates to the
+/// pure `resolveDisplay` resolver above. Side-effecting; not unit-tested.
 @available(macOS 14.0, *)
 private func resolveTargetDisplay(
     in content: SCShareableContent,
     requested: ScreenshotTarget
 ) -> (display: SCDisplay, resolved: ScreenshotTarget)? {
-    guard !content.displays.isEmpty else { return nil }
+    let cursorPoint = NSEvent.mouseLocation
+    let cursorDisplayID = NSScreen.screens
+        .first(where: { $0.frame.contains(cursorPoint) })?
+        .deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID
 
-    let mainDisplayID = CGMainDisplayID()
+    guard let resolution = resolveDisplay(
+        candidates: content.displays,
+        displayID: { $0.displayID },
+        cursorDisplayID: cursorDisplayID,
+        mainDisplayID: CGMainDisplayID(),
+        requested: requested
+    ) else { return nil }
 
-    if requested == .displayContainingCursor {
-        let cursorPoint = NSEvent.mouseLocation
-        if let nsScreen = NSScreen.screens.first(where: { $0.frame.contains(cursorPoint) }),
-           let screenNumber = nsScreen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID,
-           let display = content.displays.first(where: { $0.displayID == screenNumber })
-        {
-            return (display, .displayContainingCursor)
-        }
-    }
-
-    // Fallback path: main display, then first available.
-    if let main = content.displays.first(where: { $0.displayID == mainDisplayID }) {
-        return (main, .mainDisplay)
-    }
-    if let first = content.displays.first {
-        return (first, .mainDisplay)
-    }
-    return nil
+    return (resolution.display, resolution.resolved)
 }
 
 public final class ScreenCaptureService: DisplayScreenshotCapturing {

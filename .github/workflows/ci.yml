@@ -30,6 +30,17 @@ jobs:
           xcodebuild -version
           swift --version
 
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Regenerate xcodeproj from project.yml
+        run: |
+          # The committed pbxproj is a convenience for local Xcode users.
+          # Source of truth is project.yml. Regenerating in CI also picks
+          # up any new files added under TAELMacAgent/ or TAELMacAgentTests/
+          # without needing every contributor to run xcodegen locally.
+          make xcodeproj
+
       - name: Resolve SPM packages
         run: |
           xcodebuild \
