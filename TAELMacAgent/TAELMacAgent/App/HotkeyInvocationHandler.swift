@@ -96,8 +96,23 @@ struct HotkeyInvocationHandler {
                 gateLatencyMs: gateLatencyMs,
                 errorDescription: String(describing: error)
             ))
-            presentError("Screen capture failed: \(error.localizedDescription)")
+            presentError(Self.userFacingMessage(for: error))
             Self.log.error("Hotkey invocation failed: \(error.localizedDescription, privacy: .public)")
+        }
+    }
+
+    /// Curated, user-facing copy for the capture error HUD. The raw
+    /// `localizedDescription` may include framework-internal strings or
+    /// paths; only the typed cases we know about reach the user. Everything
+    /// else collapses to a generic message and the detail goes to `os.log`.
+    static func userFacingMessage(for error: Error) -> String {
+        switch error {
+        case ScreenCaptureError.noDisplaysAvailable:
+            return "Screen capture failed: no display is available right now."
+        case ScreenCaptureError.captureFailed:
+            return "Screen capture failed. Try again, or quit and relaunch TAEL."
+        default:
+            return "Screen capture failed."
         }
     }
 

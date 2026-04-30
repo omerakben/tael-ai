@@ -293,6 +293,29 @@ final class HotkeyHandlerTests: XCTestCase {
             "gate granted in 50ms before capture threw; latency must be retained")
     }
 
+    // MARK: - User-facing error copy
+
+    func test_userFacingMessage_mapsKnownScreenCaptureErrors() {
+        XCTAssertEqual(
+            HotkeyInvocationHandler.userFacingMessage(for: ScreenCaptureError.noDisplaysAvailable),
+            "Screen capture failed: no display is available right now."
+        )
+        XCTAssertEqual(
+            HotkeyInvocationHandler.userFacingMessage(for: ScreenCaptureError.captureFailed("anything")),
+            "Screen capture failed. Try again, or quit and relaunch TAEL."
+        )
+    }
+
+    func test_userFacingMessage_doesNotLeakUnknownErrorDescriptions() {
+        struct LeakyError: Error {
+            var localizedDescription: String { "/Users/secret/path was unreadable" }
+        }
+        let copy = HotkeyInvocationHandler.userFacingMessage(for: LeakyError())
+        XCTAssertEqual(copy, "Screen capture failed.")
+        XCTAssertFalse(copy.contains("/Users/secret/path"),
+            "Unknown error types must not surface localizedDescription to the user")
+    }
+
     // MARK: - Not-implemented kind
 
     func test_run_whenKindNotImplemented_doesNotCapture_logsRestricted() async {
