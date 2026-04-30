@@ -90,6 +90,14 @@ These are retained as the baseline heartbeat checks.
 
 ## TCC reset for clean re-test
 
+```bash
+./scripts/reset-tcc-dev.sh
+```
+
+After running, **quit the app and relaunch** before re-testing
+W1.3-W1.5. Some macOS 14 builds need a quit+relaunch for the new
+state to take effect.
+
 ## PR 5 focused-window metadata
 
 | # | Check | Expected |
@@ -112,11 +120,3 @@ These are retained as the baseline heartbeat checks.
 | A.4 | Grant Screen Recording and invoke the hotkey | Screenshot HUD appears |
 | A.5 | Grant Accessibility and invoke the hotkey | Focused-window metadata appears when available |
 | A.6 | Quit from menubar | App exits cleanly |
-
-```bash
-./scripts/reset-tcc-dev.sh
-```
-
-After running, **quit the app and relaunch** before re-testing
-W1.3–W1.5. Some macOS 14 builds need a quit+relaunch for the new
-state to take effect.

@@ -5,7 +5,6 @@
 //  Renders the Week 1 screenshot plus Week 2 focused-window metadata.
 //
 
-import AppKit
 import SwiftUI
 
 struct HUDContextBundleView: View {

@@ -60,6 +60,15 @@ public final class AXService: FocusedWindowReading {
             )
         }
 
+        guard CFGetTypeID(focusedWindowRef) == AXUIElementGetTypeID() else {
+            return FocusedWindowMetadata(
+                bundleIdentifier: bundleIdentifier,
+                applicationName: applicationName,
+                windowTitle: nil,
+                windowRole: nil,
+                capturedAt: capturedAt
+            )
+        }
         let focusedWindow = focusedWindowRef as! AXUIElement
         return FocusedWindowMetadata(
             bundleIdentifier: bundleIdentifier,

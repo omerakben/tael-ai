@@ -99,6 +99,30 @@ final class PermissionsGateTests: XCTestCase {
         XCTAssertEqual(shown, [.screenRecording])
     }
 
+    func test_withPermission_whenMissingAndShowMissingUIFalse_throwsWithoutShowingGate() async {
+        let checker = StubChecker([.accessibility: .denied])
+        let ui = SpyUI()
+        let gate = PermissionsGate(checker: checker, permissionUI: ui)
+
+        var operationRan = false
+
+        do {
+            _ = try await gate.withPermission(.accessibility, showMissingUI: false) { _ in
+                operationRan = true
+                return ()
+            }
+            XCTFail("Expected PermissionError.missing to be thrown.")
+        } catch let error as PermissionError {
+            XCTAssertEqual(error, .missing(.accessibility))
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+
+        XCTAssertFalse(operationRan)
+        let shown = await ui.shownKinds
+        XCTAssertTrue(shown.isEmpty, "Gate UI must not appear when showMissingUI is false.")
+    }
+
     // MARK: - Granted path
 
     func test_withPermission_whenGranted_runsOperationOnceWithMatchingGrantKind() async throws {

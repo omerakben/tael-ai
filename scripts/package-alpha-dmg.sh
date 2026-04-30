@@ -55,6 +55,7 @@ require_command xcodebuild
 require_command xcrun
 require_command hdiutil
 require_command codesign
+require_command security
 require_command spctl
 require_command ditto
 
