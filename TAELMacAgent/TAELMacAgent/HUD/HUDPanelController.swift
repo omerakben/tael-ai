@@ -6,8 +6,7 @@
 //  `PermissionGatePresenting` so `PermissionsGate` can route missing-
 //  permission states through the same surface as the placeholder content.
 //
-//  PR 1 ships an intentionally ugly placeholder. Real screenshot
-//  rendering lands in PR 2 (Week 1 ticket 10).
+//  Hosts placeholder, screenshot, context bundle, permission, and error HUDs.
 //
 
 import AppKit
@@ -25,6 +24,18 @@ final class HUDPanelController: NSObject, PermissionGatePresenting {
     /// "Show HUD (placeholder)" menubar item in PR 1.
     func showPlaceholder() {
         presentNew(content: HUDView())
+    }
+
+    func present(screenshot: CapturedScreenshot) {
+        presentNew(content: HUDScreenshotView(screenshot: screenshot), size: NSSize(width: 760, height: 560))
+    }
+
+    func present(context: ContextBundle) {
+        presentNew(content: HUDContextBundleView(context: context), size: NSSize(width: 760, height: 620))
+    }
+
+    func present(error message: String) {
+        presentNew(content: HUDErrorView(message: message))
     }
 
     /// `PermissionGatePresenting` implementation: show a sheet-like HUD that
@@ -50,17 +61,20 @@ final class HUDPanelController: NSObject, PermissionGatePresenting {
     /// `content`. Avoids both the multi-panel leak and the "stale rootView"
     /// bug from reusing a panel that was created for a different surface
     /// (gate vs placeholder).
-    private func presentNew<Content: View>(content: Content) {
+    private func presentNew<Content: View>(
+        content: Content,
+        size: NSSize = NSSize(width: 480, height: 280)
+    ) {
         panel?.orderOut(nil)
         panel = nil
-        let next = makePanel(content: content)
+        let next = makePanel(content: content, size: size)
         panel = next
         present(next)
     }
 
-    private func makePanel<Content: View>(content: Content) -> NSPanel {
+    private func makePanel<Content: View>(content: Content, size: NSSize) -> NSPanel {
         let host = NSHostingController(rootView: AnyView(content))
-        host.view.frame = NSRect(x: 0, y: 0, width: 480, height: 280)
+        host.view.frame = NSRect(origin: .zero, size: size)
 
         // v0.3 §23.11 defaults. Borderless + non-activating gives the
         // overlay-on-top-of-the-user's-app feel; transient prevents

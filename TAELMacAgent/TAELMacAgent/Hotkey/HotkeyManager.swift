@@ -2,36 +2,51 @@
 //  HotkeyManager.swift
 //  TAELMacAgent
 //
-//  Global hotkey owner. PR 1 contains only a placeholder binding hook
-//  (no real registration), so the app can launch without pulling in a
-//  third-party package and without calling any protected API.
-//
-//  PR 2 (Week 1 ticket 6) adds the `KeyboardShortcuts` SPM package and
-//  registers a real shortcut that calls `onTrigger`.
+//  Owns the global hotkey registration via the KeyboardShortcuts
+//  package. The actual work (gate → capture → HUD) is the closure
+//  assigned to `onTrigger` by `AppDelegate`.
 //
 
 import Foundation
+import KeyboardShortcuts
 
 @MainActor
 final class HotkeyManager {
-    /// Set by the wiring code in `AppDelegate` once the gate, capture
-    /// service, and HUD exist. PR 1 leaves this nil-by-default; PR 2
-    /// will assign a closure that runs:
-    ///
-    ///     try await permissionsGate.withPermission(.screenRecording) { grant in
-    ///         let shot = try await screenCaptureService
-    ///             .captureDisplayScreenshot(grant)
-    ///         hudController.present(shot)
-    ///     }
-    var onTrigger: (() -> Void)?
+    /// Set by `AppDelegate` to the gate→capture→HUD pipeline. Async so
+    /// the manager can await it and clear the in-flight guard only
+    /// after the full invocation completes — so re-entrant presses
+    /// during a slow capture get dropped instead of stacking.
+    var onTrigger: (() async -> Void)?
 
-    /// PR 1 no-op binding. Exists so the call site in `AppDelegate`
-    /// can be wired now and the PR 2 change is purely additive.
-    func installPlaceholderBinding() {
-        // Intentionally empty.
+    private var isInFlight = false
+
+    /// Registers the real global hotkey with KeyboardShortcuts.
+    /// Call once during `applicationDidFinishLaunching`.
+    func installBinding() {
+        KeyboardShortcuts.onKeyDown(for: .toggleTAEL) { [weak self] in
+            self?.fireIfFree()
+        }
+    }
+
+    private func fireIfFree() {
+        guard !isInFlight else { return }
+        guard let onTrigger else { return }
+        isInFlight = true
+        Task { @MainActor [weak self] in
+            await onTrigger()
+            self?.isInFlight = false
+        }
     }
 
     func tearDown() {
+        KeyboardShortcuts.disable(.toggleTAEL)
         onTrigger = nil
+        isInFlight = false
+    }
+
+    /// Test-only entry: simulates a hotkey press without going through
+    /// the KeyboardShortcuts package. Exposed via @testable import.
+    func simulatePressForTesting() {
+        fireIfFree()
     }
 }

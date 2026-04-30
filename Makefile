@@ -17,6 +17,7 @@ help:
 	@echo "  make run             Build and launch the app"
 	@echo "  make clean           Clean build artifacts"
 	@echo "  make xcodeproj       Regenerate .xcodeproj from project.yml (requires xcodegen)"
+	@echo "  make package-alpha   Build, notarize, and staple internal alpha DMG"
 	@echo "  make tcc-reset       Reset TCC entries for ai.tael.macagent (dev only)"
 	@echo ""
 	@echo "Requirements: macOS 14.0+, Xcode 15.3+. See TODO_FOR_OZZY.md."
@@ -47,6 +48,10 @@ xcodeproj:
 	    exit 1; \
 	}
 	cd TAELMacAgent && xcodegen generate
+
+.PHONY: package-alpha
+package-alpha:
+	./scripts/package-alpha-dmg.sh
 
 .PHONY: tcc-reset
 tcc-reset:

@@ -4,15 +4,19 @@
 //
 
 import AppKit
-import SwiftUI
+import Foundation
+import os.log
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    private static let log = Logger(subsystem: "ai.tael.macagent", category: "AppDelegate")
+
     private var menuBarController: MenuBarController?
     private var hotkeyManager: HotkeyManager?
     private var hudController: HUDPanelController?
     private var permissionsGate: PermissionsGate?
-    private var screenCaptureService: ScreenCaptureService?
+    private var screenCaptureService: DisplayScreenshotCapturing?
+    private var focusedWindowReader: FocusedWindowReading?
     private var logService: LocalLogService?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -27,6 +31,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             permissionUI: hudController
         )
         let screenCaptureService = ScreenCaptureService()
+        let focusedWindowReader = AXService()
         let hotkeyManager = HotkeyManager()
         let menuBarController = MenuBarController(
             onShowHUD: { [weak hudController] in
@@ -41,17 +46,36 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         self.hudController = hudController
         self.permissionsGate = permissionsGate
         self.screenCaptureService = screenCaptureService
+        self.focusedWindowReader = focusedWindowReader
         self.hotkeyManager = hotkeyManager
         self.menuBarController = menuBarController
 
         menuBarController.install()
 
-        // PR 1: do NOT register a real global hotkey yet. The hotkey
-        // package + the hotkey → gate → capture wire-up land in PR 2
-        // (Week 1 tickets 6–9). For now, only the placeholder callback
-        // exists, so launching the app does not call any protected
-        // API.
-        hotkeyManager.installPlaceholderBinding()
+        // Hotkey closure: gate → capture → HUD + log. Runs on the main
+        // actor (the `@MainActor` class isolation already covers it).
+        hotkeyManager.onTrigger = { [weak self] in
+            guard let self,
+                  let permissionsGate = self.permissionsGate,
+                  let screenCaptureService = self.screenCaptureService,
+                  let focusedWindowReader = self.focusedWindowReader,
+                  let hudController = self.hudController,
+                  let logService = self.logService else {
+                AppDelegate.log.error("Hotkey fired but app state unavailable; ignoring")
+                return
+            }
+            let handler = HotkeyInvocationHandler(
+                permissionsGate: permissionsGate,
+                screenCaptureService: screenCaptureService,
+                focusedWindowReader: focusedWindowReader,
+                presentScreenshot: { shot in hudController.present(screenshot: shot) },
+                presentContext: { bundle in hudController.present(context: bundle) },
+                presentError: { msg in hudController.present(error: msg) },
+                logService: logService
+            )
+            await handler.run()
+        }
+        hotkeyManager.installBinding()
     }
 
     func applicationWillTerminate(_ notification: Notification) {

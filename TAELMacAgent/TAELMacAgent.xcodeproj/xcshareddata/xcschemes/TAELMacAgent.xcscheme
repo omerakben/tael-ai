@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1530"
+   LastUpgradeVersion = "1430"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
-      buildImplicitDependencies = "YES">
+      buildImplicitDependencies = "YES"
+      runPostActionsOnFailure = "NO">
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -14,7 +15,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7A00000000000000000000A1"
+               BlueprintIdentifier = "19B5206FF51EAAA5D9DD33BD"
                BuildableName = "TAELMacAgent.app"
                BlueprintName = "TAELMacAgent"
                ReferencedContainer = "container:TAELMacAgent.xcodeproj">
@@ -28,7 +29,7 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7A00000000000000000000C1"
+               BlueprintIdentifier = "7BBF771A19B870A8BDB655E7"
                BuildableName = "TAELMacAgentTests.xctest"
                BlueprintName = "TAELMacAgentTests"
                ReferencedContainer = "container:TAELMacAgent.xcodeproj">
@@ -40,19 +41,32 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      onlyGenerateCoverageForSpecifiedTargets = "NO">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "19B5206FF51EAAA5D9DD33BD"
+            BuildableName = "TAELMacAgent.app"
+            BlueprintName = "TAELMacAgent"
+            ReferencedContainer = "container:TAELMacAgent.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7A00000000000000000000C1"
+               BlueprintIdentifier = "7BBF771A19B870A8BDB655E7"
                BuildableName = "TAELMacAgentTests.xctest"
                BlueprintName = "TAELMacAgentTests"
                ReferencedContainer = "container:TAELMacAgent.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -68,12 +82,14 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7A00000000000000000000A1"
+            BlueprintIdentifier = "19B5206FF51EAAA5D9DD33BD"
             BuildableName = "TAELMacAgent.app"
             BlueprintName = "TAELMacAgent"
             ReferencedContainer = "container:TAELMacAgent.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -85,12 +101,14 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7A00000000000000000000A1"
+            BlueprintIdentifier = "19B5206FF51EAAA5D9DD33BD"
             BuildableName = "TAELMacAgent.app"
             BlueprintName = "TAELMacAgent"
             ReferencedContainer = "container:TAELMacAgent.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

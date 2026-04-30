@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: build + test (macOS)
+    runs-on: macos-15
+    timeout-minutes: 25
+
+    env:
+      PROJECT: TAELMacAgent/TAELMacAgent.xcodeproj
+      SCHEME: TAELMacAgent
+      DEST: platform=macOS
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: List available Xcode versions
+        run: ls -1 /Applications | grep -i '^Xcode' || true
+
+      - name: Select Xcode 16
+        run: |
+          # The committed pbxproj uses objectVersion = 77 (Xcode 16 format).
+          # Xcode 15.x cannot read it, so pin to a 16.x toolchain that the
+          # runner image ships. Falls back to xcode-select default if no
+          # 16.x is present (which would then surface a clear error in build).
+          XCODE_PATH=$(ls -d /Applications/Xcode_16*.app 2>/dev/null | sort -V | tail -n1)
+          if [ -n "$XCODE_PATH" ]; then
+            sudo xcode-select -s "$XCODE_PATH/Contents/Developer"
+            echo "Selected: $XCODE_PATH"
+          else
+            echo "::warning::No Xcode 16.x found on runner; using default"
+          fi
+          xcodebuild -version
+          swift --version
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Regenerate xcodeproj from project.yml
+        run: |
+          # project.yml is the source of truth; the committed pbxproj is
+          # for local Xcode convenience. Regenerating here also picks up
+          # any new files globbed under TAELMacAgent/ or TAELMacAgentTests/
+          # without contributors having to run xcodegen locally.
+          set -x
+          make xcodeproj
+
+      - name: Build (Debug)
+        run: |
+          set -x
+          xcodebuild \
+            -project "$PROJECT" \
+            -scheme "$SCHEME" \
+            -configuration Debug \
+            -destination "$DEST" \
+            CODE_SIGNING_ALLOWED=NO \
+            -showBuildSettings | head -40 || true
+          xcodebuild \
+            -project "$PROJECT" \
+            -scheme "$SCHEME" \
+            -configuration Debug \
+            -destination "$DEST" \
+            CODE_SIGNING_ALLOWED=NO \
+            clean build
+
+      - name: Test
+        run: |
+          set -x
+          xcodebuild \
+            -project "$PROJECT" \
+            -scheme "$SCHEME" \
+            -configuration Debug \
+            -destination "$DEST" \
+            CODE_SIGNING_ALLOWED=NO \
+            test
