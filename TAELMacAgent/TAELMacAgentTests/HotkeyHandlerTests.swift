@@ -129,7 +129,7 @@ final class HotkeyHandlerTests: XCTestCase {
         await handler.run()
 
         let targets = await capture.observedTargets()
-        XCTAssertEqual(targets, [.week1Default])
+        XCTAssertEqual(targets, [.defaultTarget])
         XCTAssertEqual(presented.count, 1)
         XCTAssertTrue(presentedErrors.isEmpty, "Granted path must not present an error HUD")
 

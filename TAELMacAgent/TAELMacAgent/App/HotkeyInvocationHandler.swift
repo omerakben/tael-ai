@@ -56,7 +56,7 @@ struct HotkeyInvocationHandler {
                 let gateEnd = self.now()
                 gateLatencyMs = gateEnd.timeIntervalSince(gateStart) * 1000
                 let captureStart = gateEnd
-                let result = try await screenCaptureService.captureDisplayScreenshot(grant, target: .week1Default)
+                let result = try await screenCaptureService.captureDisplayScreenshot(grant, target: .defaultTarget)
                 let captureEnd = self.now()
                 captureLatencyMs = captureEnd.timeIntervalSince(captureStart) * 1000
 

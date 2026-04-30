@@ -47,7 +47,7 @@ public protocol DisplayScreenshotCapturing: Sendable {
 
 public extension DisplayScreenshotCapturing {
     func captureDisplayScreenshot(_ grant: PermissionGrant) async throws -> CapturedScreenshot {
-        try await captureDisplayScreenshot(grant, target: .week1Default)
+        try await captureDisplayScreenshot(grant, target: .defaultTarget)
     }
 }
 
